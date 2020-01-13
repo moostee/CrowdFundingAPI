@@ -6,3 +6,6 @@ from DataAccessLayer.FundingSourceType.model import FundingSourceType
 from DataAccessLayer.Issuer.model import Issuer
 from DataAccessLayer.FundingGroupUser.model import FundingGroupUser
 from DataAccessLayer.FundingTransaction.model import FundingTransaction
+from .FundingSource.model import FundingSource
+from .FundingSourceProperty.model import FundingSourceProperty
+from .FundingSourcePropertyType.model import FundingSourcePropertyType
