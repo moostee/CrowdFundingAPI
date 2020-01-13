@@ -1,7 +1,9 @@
 from django.db import models
 from ..BaseModel import BaseModel
+from ..FundingSourceType.model import FundingSourceType
+from ..FundingSourcePropertyType.model import FundingSourcePropertyType
 
 class FundingSourceProperty(BaseModel):
-    fundingSourceTypeId = models.UUIDField(editable=False)
-    fundingSourcePropertyTypeId = models.UUIDField(editable=False)
-    propertyValue = models.CharField(null=False)
+    fundingSourceTypeId = models.ForeignKey(FundingSourceType, on_delete=models.CASCADE)
+    fundingSourcePropertyTypeId = models.ForeignKey(FundingSourcePropertyType, on_delete=models.CASCADE)
+    propertyValue = models.CharField(null=False, max_length=100)
