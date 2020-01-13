@@ -1,5 +1,5 @@
 from DataAccessLayer.BaseRepository import BaseRepository
 
 
-class FundingGroupTypeRepository(BaseRepository):
+class FundingTransactionRepository(BaseRepository):
     pass
