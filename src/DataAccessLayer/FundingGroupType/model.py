@@ -13,3 +13,5 @@ class FundingGroupType(BaseModel):
     hasRollingBeneficiary = models.BooleanField(default=False)
     hasFixedDefaultCycle = models.BooleanField(default=False)
     canJoinClosedGroup = models.BooleanField(default=False)
+    description = models.CharField(max_length=256)
+
