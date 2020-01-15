@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'DataAccessLayer',
     'LogicLayer',
     'ControllerLayer',
+    'Utility',
 ]
 
 MIDDLEWARE = [

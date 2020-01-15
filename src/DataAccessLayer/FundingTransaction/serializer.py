@@ -1,9 +1,10 @@
 from rest_framework import serializers
-from DataAccessLayer.FundingGroupType.model import FundingGroupType
+from DataAccessLayer.FundingTransaction.model import FundingTransaction
 from ..DynamicSerializer import DynamicFieldsModelSerializer
+
 
 class FundingGroupTypeSerializer(DynamicFieldsModelSerializer):
 
     class Meta:
-        model = FundingGroupType
+        model = FundingTransaction
         fields = ('__all__')
