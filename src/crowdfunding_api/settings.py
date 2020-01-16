@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'LogicLayer',
     'ControllerLayer',
     'Utility',
-]
+    'drf_yasg',
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -58,6 +59,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
 
 ROOT_URLCONF = 'crowdfunding_api.urls'
 
@@ -132,3 +135,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
