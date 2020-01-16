@@ -4,7 +4,7 @@ from rest_framework import status
 from ..Response import Response as ResponseWrapper
 import uuid
 from Utility.logger import Logger
-
+ 
 class ValidateUserRole:
     def __init__(self, get_response):
         self.get_response = get_response
@@ -13,7 +13,7 @@ class ValidateUserRole:
     def __call__(self, request, pk=None):
         requestId = uuid.uuid4()
         userRole = request.authUser['roleName']
-
+ 
         if userRole == 'Admin':
             if request.method == 'POST':
                 response = self.get_response(request)

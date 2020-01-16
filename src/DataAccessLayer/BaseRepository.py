@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 class BaseRepository:
     def __init__(self, model):
         self.model = model
@@ -9,7 +11,9 @@ class BaseRepository:
         return self.model.objects.get(pk=primaryKey, isDeleted=False)
 
     def update(self, dataToUpdate, primaryKey):
-        return self.model.objects.filter(id=primaryKey).update(**dataToUpdate)
+        dataToUpdate['updatedAt'] = timezone.now()
+        self.model.objects.filter(id=primaryKey).update(**dataToUpdate)
+        return self.getOne(primaryKey)
 
     def delete(self, primaryKey):
         return self.model.objects.filter(id=primaryKey).update(isDeleted=True)
