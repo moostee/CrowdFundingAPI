@@ -2,5 +2,6 @@ src/.vs
 src/.vscode
 src/crowdfunding_api/.env
 **/__pycache__
+src/ubacrown
 
 
