@@ -1,3 +1,6 @@
 src/.vs
 src/.vscode
 src/crowdfunding_api/.env
+**/__pycache__
+
+
