@@ -1,4 +1,4 @@
 django
 djangorestframework
 django-environ
-psycopg2
+psycopg2-binary==2.8.3
