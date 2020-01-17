@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from ControllerLayer.default.viewsets import DefaultViewSet
 
 urlpatterns = [
+    path('api/', DefaultViewSet.as_view()),
     path('admin/', admin.site.urls),
 ]
