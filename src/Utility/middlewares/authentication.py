@@ -1,12 +1,14 @@
 import environ
-import json
+import uuid
 from rest_framework.response import Response
 from ..jwt import Jwt
 from rest_framework.renderers import JSONRenderer
 from rest_framework import status
-from ..Response import Response as ResponseWrapper
+from Utility.Response import Response as ResponseWrapper
 from Utility.Utility import Utility
 import uuid
+from Utility.logger import Logger
+
 
 env = environ.Env()
 environ.Env.read_env()
@@ -17,6 +19,7 @@ class Authentication:
         Response.accepted_renderer = JSONRenderer()
         Response.accepted_media_type = "application/json"
         Response.renderer_context = {}
+        self.logger = Logger('LogicLayer.Authentication')
         self.pathsToExempt = ['admin', 'swagger', 'redoc', 'api', 'signup', 'login']
 
     def __call__(self, request):
@@ -28,8 +31,10 @@ class Authentication:
         if Utility.checkExemptPaths(request.path, self.pathsToExempt):
             return None
         token = request.headers.get('Authorization')
+
         if not token:
-            return Response(ResponseWrapper.error(requestId, message='Unauthorized. No token in header'), status.HTTP_401_UNAUTHORIZED)
+            self.logger.Info(r"Unauthorized Access. Attempt to access {} without token in header. n\ REQUESTID => {}".format(request.path, requestId))
+            return Response(ResponseWrapper.error(requestId, message='Unauthorized. No token in header', responseCode='02'), status.HTTP_401_UNAUTHORIZED)
         else:
             try:
                 tokenString = token.split(' ')[1]
@@ -37,5 +42,5 @@ class Authentication:
                 request.authUser = decodedUserObj
                 return None
             except:
-                return Response(ResponseWrapper.error(requestId, message='Invalid Token'), status.HTTP_401_UNAUTHORIZED)
-    
+                self.logger.Info(r"Unauthorized Access. Invalid Token in accessing {} n\ REQUESTID => {}".format(request.path, requestId))
+                return Response(ResponseWrapper.error(requestId, message='Invalid Token', responseCode='02'), status.HTTP_401_UNAUTHORIZED)

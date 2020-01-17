@@ -1,6 +1,3 @@
-import datetime
-
-
 class BaseRepository:
     def __init__(self, model):
         self.model = model
@@ -12,8 +9,6 @@ class BaseRepository:
         return self.model.objects.get(pk=primaryKey, isDeleted=False)
 
     def update(self, serializeData, primaryKey):
-        setattr(serializeData, 'updatedAt', datetime.datetime.now())
-        print('kl', serializeData.updatedAt)
         return self.model.objects.filter(id=primaryKey).update(**serializeData)
 
     def delete(self, primaryKey):
