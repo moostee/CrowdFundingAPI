@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'mrr1$++9#4#ttetr@xh2-+vz*z)6pobh(xebd#p_d$czo7ajt1'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'ControllerLayer',
     'Utility',
     'drf_yasg',
-    ]
+    'requests',
+]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
