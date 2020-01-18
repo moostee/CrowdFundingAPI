@@ -2,12 +2,16 @@ import logging
 
 
 class Logger():
-    logger = logging.getLogger(__name__)
+    def __init__(self, __name__):
+        self.logger = logging.getLogger(__name__)
 
-    @staticmethod
-    def Info(debugMessage):
-        logger.info(debugMessage);
     
-    @staticmethod
-    def Error():
-        logger.error();
+    def Info(self, message):
+        self.logger.info("""
+        MESSAGE => %s n\
+        """% message);
+    
+    
+    def Error(self, exception):
+        self.logger.error("""
+        ERRORMESSAGE => %s """%exception,exc_info=1);

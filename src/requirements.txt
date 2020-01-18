@@ -4,3 +4,4 @@ django-environ
 psycopg2
 pyjwt
 django-cors-header
+drf-yasg
