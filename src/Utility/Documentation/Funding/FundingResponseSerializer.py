@@ -2,7 +2,8 @@ import uuid
 from rest_framework import serializers
 from DataAccessLayer.Funding.serializer import FundingSerializer
 
-swaggerFieldSchema = ( "cycle",
+swaggerFieldSchema = (  "id",  
+                        "cycle",
                         "amount",
                         "currency",
                         "dueDate",
