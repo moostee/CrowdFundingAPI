@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -62,7 +63,12 @@ MIDDLEWARE = [
     'Utility.middlewares.authentication.Authentication',
 ]
 
+<<<<<<< HEAD
 
+=======
+# Allows any client access.                      
+CORS_ORIGIN_ALLOW_ALL = True 
+>>>>>>> ch-create-logger-pcfd-11
 
 ROOT_URLCONF = 'crowdfunding_api.urls'
 
@@ -139,3 +145,39 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
+import logging.config
+
+# Gets the log level variable from environment variables
+#  if not found, it uses info as value
+LOGLEVEL = os.environ.get('LOGLEVEL', 'info').upper()
+LOGGING_CONFIG = None
+logging.config.dictConfig({
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'default': {
+            # exact format is not important, this is the minimum information
+            'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'formatter' : 'default',
+            # change path to log file to your file path
+            'filename': 'C:/Users/mustapha.omotunwase/Documents/CrowdFundingAPI/src/crowdfunding_api/Logs/debug.log',
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'default',
+        },        
+    },
+    'loggers': {
+    # root logger
+        '': {
+            'level': LOGLEVEL,
+            'handlers': ['console','file'],            
+        },
+    },
+})
