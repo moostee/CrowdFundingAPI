@@ -1,6 +1,5 @@
 import uuid
 from rest_framework.response import Response
-from rest_framework import status
 from ..Response import Response as ResponseWrapper
 import uuid
 from Utility.logger import Logger
@@ -8,7 +7,7 @@ from Utility.logger import Logger
 class ValidateUserRole:
     def __init__(self, get_response):
         self.get_response = get_response
-        self.logger = Logger('Utility.Authentication')
+        self.logger = Logger('Middleware.Authentication')
 
     def __call__(self, request, pk=None):
         requestId = uuid.uuid4()
