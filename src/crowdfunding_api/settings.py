@@ -63,12 +63,8 @@ MIDDLEWARE = [
     'Utility.middlewares.authentication.Authentication',
 ]
 
-<<<<<<< HEAD
-
-=======
 # Allows any client access.                      
 CORS_ORIGIN_ALLOW_ALL = True 
->>>>>>> ch-create-logger-pcfd-11
 
 ROOT_URLCONF = 'crowdfunding_api.urls'
 
