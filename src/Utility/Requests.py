@@ -27,7 +27,7 @@ class Request:
     def wrapper(method, url, data=None, params=None, headers=None, *args, **kwargs):
         """An exception wrapper that returns the response or raises an exception on failure"""
         try:
-            response = method(url, data=data, params=params, headers=headers)
+            response = method(url, data=data, params=params, headers=headers, verify=False)
         except Exception as exception:
             raise exception
         return(response.json())

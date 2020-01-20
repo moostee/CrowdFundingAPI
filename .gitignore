@@ -2,16 +2,10 @@ src/.vs
 .vscode
 .idea
 src/crowdfunding_api/.env
-src/ubacrown
-*/ControllerLayer/*/__pycache__
-*/crowdfunding_api/*/__pycache__
-*/DataAccessLayer/*/__pycache__
-*/LogicLayer/*/__pycache__
-*/Utility/*/__pycache__
+**/__pycache__/
+src/ubacrown/
 src/db.sqlite3
-Logs/
-
-
+**/Logs
 
 # Created by https://www.gitignore.io/api/python,windows,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=python,windows,visualstudiocode
@@ -159,3 +153,4 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/python,windows,visualstudiocode
+
