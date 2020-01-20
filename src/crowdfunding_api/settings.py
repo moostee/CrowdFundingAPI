@@ -162,7 +162,7 @@ logging.config.dictConfig({
             'class': 'logging.FileHandler',
             'formatter' : 'default',
             # change path to log file to your file path
-            'filename': 'C:/Users/mustapha.omotunwase/Documents/CrowdFundingAPI/src/crowdfunding_api/Logs/debug.log',
+            'filename': os.path.join(BASE_DIR, 'crowdfunding_api', 'Logs', 'debug.log'),
         },
         'console': {
             'class': 'logging.StreamHandler',
