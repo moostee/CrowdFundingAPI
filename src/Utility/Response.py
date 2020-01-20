@@ -18,3 +18,28 @@ class Response:
             "responseCode": responseCode,
             "error": error
         }
+    
+    @staticmethod
+    def successfulResponse(requestId, data=None, message = "success"):
+        return {
+            "requestId" : requestId,
+            "responseCode" : "00",
+            "responseMessage" : message,
+            "data" : data
+        }
+
+    @staticmethod
+    def unSuccessfulResponse(requestId,message="Unsuccessful"):
+        return {
+            "requestId" : requestId,
+            "responseCode" : "02",
+            "responseMessage" : message
+        }
+    
+    @staticmethod
+    def ExceptionResponse(requestId):
+        return {
+            "requestId" : requestId,
+            "responseCode" : "99",
+            "responseMessage" : "An Error occured while processing your request. Please try again later."
+        }

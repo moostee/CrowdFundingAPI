@@ -60,7 +60,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'Utility.middlewares.authentication.Authentication',
+    # 'Utility.middlewares.authentication.Authentication',
 ]
 
 # Allows any client access.                      
