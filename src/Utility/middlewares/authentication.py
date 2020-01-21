@@ -6,6 +6,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework import status
 from ..Response import Response as ResponseWrapper
 from Utility.Utility import Utility
+import uuid
 
 env = environ.Env()
 environ.Env.read_env()
@@ -23,17 +24,18 @@ class Authentication:
         return response
 
     def process_view(self, request, view_func, view_args, view_kwargs):
+        requestId = uuid.uuid4()
         if Utility.checkExemptPaths(request.path, self.pathsToExempt):
             return None
         token = request.headers.get('Authorization')
         if not token:
-            return Response(ResponseWrapper.error(message='Unauthorized. No token in header'), status.HTTP_401_UNAUTHORIZED)
+            return Response(ResponseWrapper.error(requestId, message='Unauthorized. No token in header'), status.HTTP_401_UNAUTHORIZED)
         else:
             try:
                 tokenString = token.split(' ')[1]
-                decodedUserObj = Jwt.DecodeJWT(tokenString, env('SECRET'))
-                request.authUser = json.loads(decodedUserObj['actort'])
+                decodedUserObj = Jwt.DecodeJWT(tokenString, env('JWT_SECRET'))
+                request.authUser = decodedUserObj
                 return None
             except:
-                return Response(ResponseWrapper.error(message='Invalid Token'), status.HTTP_401_UNAUTHORIZED)
+                return Response(ResponseWrapper.error(requestId, message='Invalid Token'), status.HTTP_401_UNAUTHORIZED)
     
