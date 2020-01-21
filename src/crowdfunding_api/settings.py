@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
+import logging.config
 import os
 import environ
 
@@ -64,8 +65,8 @@ MIDDLEWARE = [
     'Utility.middlewares.authentication.Authentication',
 ]
 
-# Allows any client access.                      
-CORS_ORIGIN_ALLOW_ALL = True 
+# Allows any client access.
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'crowdfunding_api.urls'
 
@@ -142,8 +143,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-import logging.config
-
 # Gets the log level variable from environment variables
 #  if not found, it uses info as value
 LOGLEVEL = os.environ.get('LOGLEVEL', 'info').upper()
@@ -161,20 +160,20 @@ logging.config.dictConfig({
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'formatter' : 'default',
+            'formatter': 'default',
             # change path to log file to your file path
             'filename': os.path.join(BASE_DIR, 'crowdfunding_api', 'Logs', 'debug.log'),
         },
         'console': {
             'class': 'logging.StreamHandler',
             'formatter': 'default',
-        },        
+        },
     },
     'loggers': {
-    # root logger
+        # root logger
         '': {
             'level': LOGLEVEL,
-            'handlers': ['console','file'],            
+            'handlers': ['console', 'file'],
         },
     },
 })
