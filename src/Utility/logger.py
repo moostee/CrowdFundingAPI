@@ -9,9 +9,9 @@ class Logger():
     def Info(self, message):
         self.logger.info("""
         MESSAGE => %s n\
-        """% message);
+        """% message)
     
     
     def Error(self, exception):
         self.logger.error("""
-        ERRORMESSAGE => %s """%exception,exc_info=1);
+        ERRORMESSAGE => %s """%exception,exc_info=1)

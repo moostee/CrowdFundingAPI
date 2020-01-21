@@ -2,15 +2,15 @@ from django.db import models
 from ..BaseModel import BaseModel
 
 class FundingGroupType(BaseModel):
-    name = models.CharField(max_length=100)
-    hasFixedIndividualAmount = models.BooleanField(default=False)
-    hasFixedGroupAmount = models.BooleanField(default=False)
-    hasMaturityDate = models.BooleanField(default=False)
+    name = models.CharField(max_length=100, unique=True)
+    hasFixedIndividualAmount = models.BooleanField()
+    hasFixedGroupAmount = models.BooleanField()
+    hasMaturityDate = models.BooleanField()
     maxUser = models.IntegerField()
     minUser = models.IntegerField()
-    isAutomatedCycle = models.BooleanField(default=False)
+    isAutomatedCycle = models.BooleanField()
     defaultCycleDuration = models.CharField(max_length=10)
-    hasRollingBeneficiary = models.BooleanField(default=False)
-    hasFixedDefaultCycle = models.BooleanField(default=False)
-    canJoinClosedGroup = models.BooleanField(default=False)
+    hasRollingBeneficiary = models.BooleanField()
+    hasFixedDefaultCycle = models.BooleanField()
+    canJoinClosedGroup = models.BooleanField()
     description = models.CharField(max_length=256)
