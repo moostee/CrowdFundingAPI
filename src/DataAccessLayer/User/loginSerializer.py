@@ -1,10 +1,9 @@
 from rest_framework import serializers
-from ..User.loginModel import LoginModel
-from ..DynamicSerializer import DynamicFieldsModelSerializer
 
 
-class LoginSerializer(DynamicFieldsModelSerializer):
-
-    class Meta:
-        model = LoginModel
-        fields = ('__all__')
+class LoginSerializer(serializers.Serializer):
+    phoneNumber = serializers.CharField(max_length=100, required=False)
+    email = serializers.EmailField(required=False)
+    username = serializers.CharField(max_length=100, required=False)
+    pin = serializers.CharField(max_length=6, required=False)
+    Password = serializers.CharField(max_length=100, required=False)

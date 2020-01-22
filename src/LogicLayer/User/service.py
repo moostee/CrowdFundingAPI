@@ -3,7 +3,6 @@ from DataAccessLayer.User.serializer import UserSerializer
 from Utility.Requests import Request
 from Utility.Response import Response
 from Utility.jwt import Jwt
-from DataAccessLayer.User.loginSerializer import LoginSerializer
 from Utility.logger import Logger
 import json
 import environ

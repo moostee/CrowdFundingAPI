@@ -17,8 +17,8 @@ class Authentication:
         Response.accepted_renderer = JSONRenderer()
         Response.accepted_media_type = "application/json"
         Response.renderer_context = {}
-        self.pathsToExempt = ['admin', 'swagger', 'redoc', 'api', 'signup', 'signin']
         self.logger = Logger('Middleware.Authentication')
+        self.pathsToExempt = ['admin', 'swagger', 'redoc', 'api', 'signup', 'signin']
 
     def __call__(self, request):
         response = self.get_response(request)
