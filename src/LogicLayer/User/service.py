@@ -71,7 +71,7 @@ class UserService:
                         0]
                     if user:
                         token = Jwt.EncodeJWT(
-                            {"userId": str(user.id), "roleName": str(
+                            {"id": str(user.id), "roleName": str(
                                 payload["roleName"])},
                             env('JWT_SECRET')
                         )

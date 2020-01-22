@@ -14,13 +14,17 @@ class Issuer(APIView):
         self.IssuerService = service()
         self.requestId = uuid.uuid4()
 
+    # @method_decorator(ValidateUserRole)
+    # def post(self, request, format=None):
+    #     validData = IssuerSerializer(data=request.data)
+    #     if not validData.is_valid():
+    #         self.logger.Info(r"Create Issuer. Failed validation with: {}, n\ REQUESTID => {}".format(str(validData.errors), self.requestId))
+    #         return Response(ResponseWrapper.error(self.requestId, message="Validation error occured processing request", error=validData.errors, responseCode='01'))
+    #     return Response(self.IssuerService.createIssuer(validData.data))
+    
     @method_decorator(ValidateUserRole)
     def post(self, request, format=None):
-        validData = IssuerSerializer(data=request.data)
-        if not validData.is_valid():
-            self.logger.Info(r"Create Issuer. Failed validation with: {}, n\ REQUESTID => {}".format(str(validData.errors), self.requestId))
-            return Response(ResponseWrapper.error(self.requestId, message="Validation error occured processing request", error=validData.errors, responseCode='01'))
-        return Response(self.IssuerService.createIssuer(validData.data))
-    
+        return Response(self.IssuerService.createIssuer(request.data))
+
     def get(self, request, format=None):
         return Response(self.IssuerService.getAllIssuers())

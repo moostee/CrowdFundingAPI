@@ -12,9 +12,14 @@ class IssuerService:
         self.data = DataModule()
         self.logger = Logger('LogicLayer.IssuerService')
         self.requestId = uuid.uuid4()
-
+    
     def createIssuer(self,data):
         try:
+            validData = IssuerSerializer(data=data)
+            if not validData.is_valid():
+                self.logger.Info(r"Issuer with data \"{}\" could not be validated  with error {} n\ REQUESTID => {}".format(data,validData.errors,self.requestId))
+                return Response.error(self.requestId, error=validData.errors)
+
             formattedData = {key:(value.lower() if type(value) == str else value) for key,value in data.items()}
             savedIssuer = self.data.issuerRepository.create(formattedData)
             self.logger.Info(r"Issuer with name --> {} was successfully created, n\ REQUESTID => {}".format(data['name'],self.requestId))
