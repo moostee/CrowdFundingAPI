@@ -8,8 +8,8 @@ class BaseRepository:
     def getOne(self, primaryKey):
         return self.model.objects.get(pk=primaryKey, isDeleted=False)
 
-    def update(self, serializeData, primaryKey):
-        return self.model.objects.filter(id=primaryKey).update(**serializeData)
+    def update(self, dataToUpdate, primaryKey):
+        return self.model.objects.filter(id=primaryKey).update(**dataToUpdate)
 
     def delete(self, primaryKey):
         return self.model.objects.filter(id=primaryKey).update(isDeleted=True)
