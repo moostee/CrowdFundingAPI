@@ -27,5 +27,6 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('api/', DefaultViewSet.as_view()),
     path('api/users/', include('ControllerLayer.User.urls')),
-    path('api/fundinggrouptypes/', include('ControllerLayer.FundingGroupType.urls'))
+    path('api/fundinggrouptypes/', include('ControllerLayer.FundingGroupType.urls')),
+    path('api/issuers/', include('ControllerLayer.Issuer.urls'))
 ]

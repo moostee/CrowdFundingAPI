@@ -6,6 +6,8 @@ from DataAccessLayer.FundingSourceProperty.repository import FundingSourceProper
 from DataAccessLayer.FundingSourceProperty.model import FundingSourceProperty
 from DataAccessLayer.User.model import User
 from DataAccessLayer.User.repository import UserRepository
+from DataAccessLayer.Issuer.model import Issuer
+from DataAccessLayer.Issuer.repository import IssuerRepository
 
 
 class DataModule:
@@ -20,3 +22,5 @@ class DataModule:
             FundingSourceProperty)
 
         self.userRepository = UserRepository(User)
+
+        self.issuerRepository = IssuerRepository(Issuer)
