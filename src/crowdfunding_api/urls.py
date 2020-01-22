@@ -30,5 +30,6 @@ urlpatterns = [
     path('api/fundinggrouptypes/', include('ControllerLayer.FundingGroupType.urls')),
     path('api/issuers/', include('ControllerLayer.Issuer.urls')),
     path('api/roles/', include('ControllerLayer.Role.urls')),
-    path('api/beneficiarysourcetypes/', include('ControllerLayer.BeneficiarySourceType.urls'))
+    path('api/beneficiarysourcetypes/', include('ControllerLayer.BeneficiarySourceType.urls')),
+    path('api/fundings/', include('ControllerLayer.Funding.urls')),
 ]

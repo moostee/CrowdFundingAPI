@@ -20,7 +20,7 @@ class PostResponseSerializer(serializers.Serializer):
 class UpdateResponseSerializer(serializers.Serializer):
 
     requestId = serializers.UUIDField(default=uuid.uuid4)
-    message = serializers.CharField(default='Beneficiary source type updated successfully')
+    mesesessagees = serializers.CharField(default='Beneficiary source type updated successfully')
     responseCode = serializers.CharField(default="00")
     data = None
 
