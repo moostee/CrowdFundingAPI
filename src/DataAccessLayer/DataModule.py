@@ -17,13 +17,12 @@ class DataModule:
     def __init__(self):
         self.fundingSourceRepository = FundingSourceRepository(FundingSource)
 
-        self.fundingSourceTypeRepository = FundingSourceTypeRepository(
-            FundingSourceType)
+        self.fundingSourceTypeRepository = FundingSourceTypeRepository(FundingSourceType)
 
-        self.fundingSourcePropertyRepository = FundingSourcePropertyRepository(
-            FundingSourceProperty)
+        self.fundingSourcePropertyRepository = FundingSourcePropertyRepository(FundingSourceProperty)
 
         self.userRepository = UserRepository(User)
 
         self.issuerRepository = IssuerRepository(Issuer)
+
         self.roleRepository = RoleRepository(Role)
