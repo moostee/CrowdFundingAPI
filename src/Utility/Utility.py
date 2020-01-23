@@ -1,3 +1,9 @@
+import random
+import string
+import re
+from datetime import date, timedelta
+import calendar
+
 class Utility:
     @staticmethod
     def convertFieldValueToLowerCase(dict, key):
@@ -21,3 +27,27 @@ class Utility:
             return True
         else:
             return False
+    
+    @staticmethod
+    def randomString(stringLength):
+        """Generate a random string with the combination of lowercase and uppercase letters """
+
+        letters = string.ascii_letters
+        return ''.join(random.choice(letters) for i in range(stringLength))
+
+    @staticmethod
+    def computeNextCycleDate(cycleDuration, startDate):
+        # \\d+(d|w|m) => 1d, 1w, 2m
+        data = re.search(r"^\d+",cycleDuration).group()
+        data = int(data)
+        span = cycleDuration[-1]
+        startDateList = [int(x) for x in startDate.split('-')]
+        startDate = date(startDateList[0], startDateList[1], startDateList[2])
+                
+        if span == 'd':
+            extraDays = data
+        elif span == 'w':
+            extraDays = 7 * data
+        elif span == 'm':
+            extraDays = calendar.monthrange(startDate.year, startDate.month)[1]
+        return startDate + timedelta(days=extraDays)

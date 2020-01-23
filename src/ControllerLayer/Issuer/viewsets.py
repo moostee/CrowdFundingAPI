@@ -10,22 +10,27 @@ class Issuer(APIView):
 
     @method_decorator(ValidateUserRole)
     def post(self, request, format=None):
-        return Response(self.IssuerService.createIssuer(request.data))
+        response,status = self.IssuerService.createIssuer(request.data)
+        return Response(response, status=status)
 
     def get(self, request, format=None):
-        return Response(self.IssuerService.getAllIssuers())
+        response,status = self.IssuerService.getAllIssuers()
+        return Response(response, status=status)
 
 class IssuerDetails(APIView):
     def __init__(self):
         self.IssuerService = service()
     
     def get(self, request, pk, format=None):
-        return Response(self.IssuerService.getOneIssuer(pk))
+        response,status = self.IssuerService.getOneIssuer(pk)
+        return Response(response, status=status)
 
     @method_decorator(ValidateUserRole)
     def put(self, request, pk, format=None):
-        return Response(self.IssuerService.updateIssuer(request.data, pk))
+        response,status = self.IssuerService.updateIssuer(request.data, pk)
+        return Response(response, status=status)
 
     @method_decorator(ValidateUserRole)
     def delete(self, request, pk, format=None):
-        return Response(self.IssuerService.deleteIssuer(pk))
+        response,status = self.IssuerService.deleteIssuer(pk)
+        return Response(response, status=status)
