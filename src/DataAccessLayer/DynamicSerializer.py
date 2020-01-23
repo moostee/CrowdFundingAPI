@@ -19,3 +19,9 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
             existing = set(self.fields)
             for field_name in existing - allowed:
                 self.fields.pop(field_name)
+    
+    def to_representation(self, instance):
+        """Convert `name` to lowercase."""
+        ret = super().to_representation(instance)
+        if "name" in ret.keys(): ret['name'] = ret['name'].lower()
+        return ret
