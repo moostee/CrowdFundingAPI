@@ -11,3 +11,8 @@ class FundingGroupSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = FundingGroup
         fields = ('__all__')
+        extra_kwargs = {
+            "code": {'required': False},
+            "initiator": {"required": False},
+        }
+        validators = []
