@@ -28,7 +28,7 @@ class FundingGroupTypeService:
         
         except IntegrityError:
             self.logger.Info(r"Funding Group Type with name --> {} was not created. Funding Group Type already exists. n\ REQUESTID => {}".format(data['name'],self.requestId))
-            return Response.error(requestId, error=r"{} Funding Group Type already exists".format(data['name']), responseCode='01'), 409
+            return Response.error(self.requestId, error=r"{} Funding Group Type already exists".format(data['name']), responseCode='01'), 409
 
         except BaseException as ex:
             self.logger.Info(r"Funding Group Type --> {} could not be created, n\ REQUESTID => {}".format(str(data), self.requestId))
