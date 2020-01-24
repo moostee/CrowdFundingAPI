@@ -14,7 +14,7 @@ class BeneficiarySourceTypeList(APIView):
     def get(self,request,format=None):
         return Response(self.logic.beneficiarySourceTypeService.getAllBeneficiarySourceType());
 
-    @swagger_auto_schema(responses={200: PostResponseSerializer},request_body=BeneficiarySourceTypeSerializer(fields=('name')))
+    @swagger_auto_schema(responses={200: PostResponseSerializer,401 : "Bad Request"},request_body=BeneficiarySourceTypeSerializer(fields=('name')))
     def post(self, request, format=None):
         validData = BeneficiarySourceTypeSerializer(data=request.data)
         if(validData.is_valid(raise_exception=True) is False): return Response(validData.errors)
