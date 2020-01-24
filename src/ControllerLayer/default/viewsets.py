@@ -6,7 +6,7 @@ from Utility.logger import Logger
 import uuid
 
 class DefaultViewSet(APIView):
-    @swagger_auto_schema(operation_description="API Welcome View", responses={200: '{"Message":"Welcome crowdfunding api"}'})
+    @swagger_auto_schema(operation_description="API Welcome View", responses={200: '{"Message":"Welcome crowdfunding api"}'},auto_schema=None)
     def get(self, request, format=None):
         logger = Logger('ControllerLayer.Default')
         requestId = uuid.uuid4()

@@ -62,7 +62,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'Utility.middlewares.authentication.Authentication',
+    # 'Utility.middlewares.authentication.Authentication',
 ]
 
 # Allows any client access.
@@ -149,7 +149,7 @@ LOGLEVEL = os.environ.get('LOGLEVEL', 'info').upper()
 LOGGING_CONFIG = None
 logging.config.dictConfig({
     'version': 1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
     'formatters': {
         'default': {
             # exact format is not important, this is the minimum information

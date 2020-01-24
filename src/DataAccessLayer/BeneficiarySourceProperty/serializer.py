@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from DataAccessLayer.FundingGroupType.model import FundingGroupType
+from DataAccessLayer.BeneficiarySourceProperty.model import BeneficiarySourceProperty
 from ..DynamicSerializer import DynamicFieldsModelSerializer
 
-class FundingSourcePropertySerializer(DynamicFieldsModelSerializer):
+class BeneficiarySourcePropertySerializer(DynamicFieldsModelSerializer):
 
     class Meta:
-        model = FundingGroupType
+        model = BeneficiarySourceProperty
         fields = ('__all__')

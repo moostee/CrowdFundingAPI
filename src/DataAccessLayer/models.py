@@ -11,6 +11,5 @@ from DataAccessLayer.FundingSourceProperty.model import FundingSourceProperty
 from DataAccessLayer.FundingTransaction.model import FundingTransaction
 from DataAccessLayer.BeneficiarySourceType.model import BeneficiarySourceType
 from DataAccessLayer.BeneficiarySource.model import BeneficiarySource
-from DataAccessLayer.BeneficiarySourcePropertyType.model import BeneficiarySourcePropertyType
 from DataAccessLayer.BeneficiarySourceProperty.model import BeneficiarySourceProperty
 from DataAccessLayer.User.model import User

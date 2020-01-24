@@ -10,6 +10,8 @@ from DataAccessLayer.Issuer.model import Issuer
 from DataAccessLayer.Issuer.repository import IssuerRepository
 from DataAccessLayer.Role.repository import RoleRepository
 from DataAccessLayer.Role.model import Role
+from DataAccessLayer.BeneficiarySourceType.repository import BeneficiarySourceTypeRepository
+from DataAccessLayer.BeneficiarySourceType.model import BeneficiarySourceType
 
 
 class DataModule:
@@ -26,3 +28,5 @@ class DataModule:
         self.issuerRepository = IssuerRepository(Issuer)
 
         self.roleRepository = RoleRepository(Role)
+        
+        self.beneficiarySourceTypeRepository = BeneficiarySourceTypeRepository(BeneficiarySourceType)
