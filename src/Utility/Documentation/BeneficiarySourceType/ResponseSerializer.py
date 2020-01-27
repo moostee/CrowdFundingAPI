@@ -16,6 +16,7 @@ class PostResponseSerializer(serializers.Serializer):
     responseCode = serializers.CharField(default="00")
     data = BeneficiarySourceTypeSerializer(many=False,fields=('id','name'))
 
+
 class UpdateResponseSerializer(serializers.Serializer):
 
     requestId = serializers.UUIDField(default=uuid.uuid4)
