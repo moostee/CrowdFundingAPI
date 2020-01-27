@@ -38,7 +38,7 @@ class UserLogin(APIView):
         if not validData.is_valid():
             self.logger.Info(r"User Login. Failed validation with: {}, n\ REQUESTID => {}".format(
                 str(validData.errors), requestId))
-            return Response(ResponseWrapper.error(requestId, error=validData.errors))
+            return Response(ResponseWrapper.error(requestId, error=validData.errors), status=400)
         clientSecret = request.headers.get("client-secret")
         if clientSecret is None:
             return Response(ResponseWrapper.error(requestId, error="Invalid Access Token"), status=401)
