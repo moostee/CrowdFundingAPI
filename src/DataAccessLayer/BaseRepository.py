@@ -1,6 +1,11 @@
+from django.utils import timezone
+
 class BaseRepository:
     def __init__(self, model):
         self.model = model
+
+    def all(self):
+        return self.model.objects.all()
 
     def getAll(self):
         return self.model.objects.filter(isDeleted=False)
@@ -8,8 +13,11 @@ class BaseRepository:
     def getOne(self, primaryKey):
         return self.model.objects.get(pk=primaryKey, isDeleted=False)
 
-    def update(self, serializeData, primaryKey):
-        return self.model.objects.filter(id=primaryKey).update(**serializeData)
+    def update(self, dataToUpdate, primaryKey):
+        dataToUpdate['updatedAt'] = timezone.now()
+        if 'isDeleted' in dataToUpdate.keys(): del dataToUpdate['isDeleted']
+        self.model.objects.filter(id=primaryKey).update(**dataToUpdate)
+        return self.getOne(primaryKey)
 
     def delete(self, primaryKey):
         return self.model.objects.filter(id=primaryKey).update(isDeleted=True)

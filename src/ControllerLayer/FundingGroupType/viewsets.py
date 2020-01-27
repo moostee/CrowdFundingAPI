@@ -1,7 +1,6 @@
 import uuid
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.utils import timezone
 from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
 from LogicLayer.FundingGroupType.service import FundingGroupTypeService as service
@@ -14,7 +13,7 @@ from Utility.logger import Logger
 class FundingGroupTypeList(APIView):
     def __init__(self):
         self.fundingGroupTypeService = service()
-        self.logger = Logger('LogicLayer.FundingGroupTypeList')
+        self.logger = Logger('ControllerLayer.FundingGroupTypeList')
 
     @method_decorator(ValidateUserRole)
     def post(self, request, format=None):
@@ -35,23 +34,14 @@ class FundingGroupTypeList(APIView):
 class FundingGroupTypeDetail(APIView):
     def __init__(self):
         self.fundingGroupTypeService = service()
-        self.logger = Logger('LogicLayer.FundingGroupTypeDetail')
+        self.logger = Logger('ControllerLayer.FundingGroupTypeDetail')
 
     def get(self, request, pk, format=None):
         return Response(self.fundingGroupTypeService.getOneFundingGroupType(pk))
 
     @method_decorator(ValidateUserRole)
     def put(self, request, pk, format=None):
-        requestId = uuid.uuid4()
-        requestBody = request.data
-
-        if 'name' in request.data: requestBody = Utility.convertFieldValueToLowerCase(request.data, 'name')
-        validData = FundingGroupTypeSerializer(data=Utility.appendNewFieldToDict(requestBody, 'updatedAt', timezone.now()))
-
-        if(validData.is_valid() is False):
-            self.logger.Info(r"Update Funding Group Type. Failed validation with: {}, n\ REQUESTID => {}".format(str(validData.errors), requestId))
-            return Response(ResponseWrapper.error(requestId, error=validData.errors, responseCode='01'))
-        return Response(self.fundingGroupTypeService.updateFundingGroupType(pk, validData.data))
+        return Response(self.fundingGroupTypeService.updateFundingGroupType(pk, request.data))
     
     @method_decorator(ValidateUserRole)
     def delete(self, request, pk, format=None):

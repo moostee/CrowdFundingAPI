@@ -6,6 +6,10 @@ from DataAccessLayer.FundingSourceProperty.repository import FundingSourceProper
 from DataAccessLayer.FundingSourceProperty.model import FundingSourceProperty
 from DataAccessLayer.User.model import User
 from DataAccessLayer.User.repository import UserRepository
+from DataAccessLayer.Issuer.model import Issuer
+from DataAccessLayer.Issuer.repository import IssuerRepository
+from DataAccessLayer.Role.repository import RoleRepository
+from DataAccessLayer.Role.model import Role
 from DataAccessLayer.BeneficiarySourceType.repository import BeneficiarySourceTypeRepository
 from DataAccessLayer.BeneficiarySourceType.model import BeneficiarySourceType
 
@@ -15,12 +19,14 @@ class DataModule:
     def __init__(self):
         self.fundingSourceRepository = FundingSourceRepository(FundingSource)
 
-        self.fundingSourceTypeRepository = FundingSourceTypeRepository(
-            FundingSourceType)
+        self.fundingSourceTypeRepository = FundingSourceTypeRepository(FundingSourceType)
 
-        self.fundingSourcePropertyRepository = FundingSourcePropertyRepository(
-            FundingSourceProperty)
+        self.fundingSourcePropertyRepository = FundingSourcePropertyRepository(FundingSourceProperty)
 
         self.userRepository = UserRepository(User)
 
+        self.issuerRepository = IssuerRepository(Issuer)
+
+        self.roleRepository = RoleRepository(Role)
+        
         self.beneficiarySourceTypeRepository = BeneficiarySourceTypeRepository(BeneficiarySourceType)

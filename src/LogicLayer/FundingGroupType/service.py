@@ -1,8 +1,11 @@
+from django.db import IntegrityError
+from django.utils import timezone
 from DataAccessLayer.FundingGroupType.model import FundingGroupType as fundingGroupTypeModel
 from DataAccessLayer.FundingGroupType.repository import FundingGroupTypeRepository as fundingGroupTypeRepo
 from DataAccessLayer.FundingGroupType.serializer import FundingGroupTypeSerializer
 from Utility.Response import Response
 from Utility.logger import Logger
+from Utility.Utility import Utility
 
 import uuid
 class FundingGroupTypeService:
@@ -55,13 +58,15 @@ class FundingGroupTypeService:
         requestId = uuid.uuid4()
 
         try:
+            if 'name' in dataToUpdate: Utility.convertFieldValueToLowerCase(dataToUpdate, 'name')
+
             if self.fundingGroupTypeRepository.IsExists(pk) is False:
                 self.logger.Info(r"Funding Group Type with id --> {} does not exist, n\ REQUESTID => {}".format(pk, requestId))
                 return Response.error(requestId, message="Funding Group Type does not exist", responseCode='03')
 
             updatedData = self.fundingGroupTypeRepository.update(dataToUpdate, pk)
             self.logger.Info(r"Successfully updated funding group type with id --> {}, n\ REQUESTID => {}".format(pk, requestId))
-            return Response.success(requestId, message='Funding Group Type has been successfully updated', data=[{ "count": updatedData}])
+            return Response.success(requestId, message='Funding Group Type has been successfully updated', data=FundingGroupTypeSerializer(updatedData, many=False).data)
 
         except Exception:
             self.logger.Info(r"Funding Group Type with id --> {} could not be updated. An exception occured: {}, n\ REQUESTID => {}".format(pk, str(Exception), requestId))

@@ -28,5 +28,7 @@ urlpatterns = [
     path('api/', DefaultViewSet.as_view()),
     path('api/users/', include('ControllerLayer.User.urls')),
     path('api/fundinggrouptypes/', include('ControllerLayer.FundingGroupType.urls')),
+    path('api/issuers/', include('ControllerLayer.Issuer.urls')),
+    path('api/roles/', include('ControllerLayer.Role.urls')),
     path('api/beneficiarysourcetypes/', include('ControllerLayer.BeneficiarySourceType.urls'))
 ]

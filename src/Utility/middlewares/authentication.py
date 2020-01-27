@@ -1,5 +1,4 @@
 import environ
-import uuid
 from rest_framework.response import Response
 from ..jwt import Jwt
 from rest_framework.renderers import JSONRenderer
@@ -8,7 +7,6 @@ from Utility.Response import Response as ResponseWrapper
 from Utility.Utility import Utility
 import uuid
 from Utility.logger import Logger
-
 
 env = environ.Env()
 environ.Env.read_env()
@@ -19,8 +17,8 @@ class Authentication:
         Response.accepted_renderer = JSONRenderer()
         Response.accepted_media_type = "application/json"
         Response.renderer_context = {}
-        self.logger = Logger('LogicLayer.Authentication')
-        self.pathsToExempt = ['admin', 'swagger', 'redoc', 'api', 'signup', 'login']
+        self.logger = Logger('Middleware.Authentication')
+        self.pathsToExempt = ['admin', 'swagger', 'redoc', 'api', 'signup', 'signin']
 
     def __call__(self, request):
         response = self.get_response(request)
