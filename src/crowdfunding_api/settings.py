@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import logging.config
 import os
 import environ
+from datetime import date
 
 env = environ.Env()
 environ.Env.read_env()
@@ -62,7 +63,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    # 'Utility.middlewares.authentication.Authentication',
+    'Utility.middlewares.authentication.Authentication',
 ]
 
 # Allows any client access.
@@ -149,7 +150,7 @@ LOGLEVEL = os.environ.get('LOGLEVEL', 'info').upper()
 LOGGING_CONFIG = None
 logging.config.dictConfig({
     'version': 1,
-    'disable_existing_loggers': True,
+    'disable_existing_loggers': False,
     'formatters': {
         'default': {
             # exact format is not important, this is the minimum information
@@ -162,7 +163,7 @@ logging.config.dictConfig({
             'class': 'logging.FileHandler',
             'formatter': 'default',
             # change path to log file to your file path
-            'filename': os.path.join(BASE_DIR, 'crowdfunding_api', 'Logs', 'debug.log'),
+            'filename': os.path.join(BASE_DIR, 'crowdfunding_api', 'Logs', 'debug_%s%s'%(date.today(), '.log')),
         },
         'console': {
             'class': 'logging.StreamHandler',

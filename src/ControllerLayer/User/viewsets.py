@@ -21,8 +21,9 @@ class UserSignup(APIView):
         if(not validData.is_valid()):
             self.logger.Info(r"User signup. Failed validation with: {}, n\ REQUESTID => {}".format(
                 str(validData.errors), requestId))
-            return Response(ResponseWrapper.error(requestId, message="Validation error occured processing request", error=validData.errors, responseCode='01'))
-        return Response(self.UserService.createUser(validData.data, client_secret))
+            return Response(ResponseWrapper.error(requestId, message="Validation error occured processing request", error=validData.errors, responseCode='01'), status=400)
+        response,status = self.UserService.createUser(validData.data, client_secret)
+        return Response(response, status=status)
 
 
 class UserLogin(APIView):
@@ -34,11 +35,12 @@ class UserLogin(APIView):
     def post(self, request, format=None):
         requestId = uuid.uuid4()
         validData = LoginSerializer(data=request.data)
-        if(validData.is_valid() is False):
+        if not validData.is_valid():
             self.logger.Info(r"User Login. Failed validation with: {}, n\ REQUESTID => {}".format(
                 str(validData.errors), requestId))
             return Response(ResponseWrapper.error(requestId, error=validData.errors))
         clientSecret = request.headers.get("client-secret")
         if clientSecret is None:
-            return Response(ResponseWrapper.error(requestId, error="Invalid Access Token"))
-        return Response(self.userService.verifyUser(validData.data, clientSecret))
+            return Response(ResponseWrapper.error(requestId, error="Invalid Access Token"), status=401)
+        response,status = self.userService.verifyUser(validData.data, clientSecret)
+        return Response(response, status=status)
