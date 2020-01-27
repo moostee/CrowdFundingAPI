@@ -21,9 +21,9 @@ class BeneficiarySourceTypeService:
             self.logger.Info("REQUESTID => {} MESSAGE => Beneficiary source type gotten successfully".format(requestId))
         except Exception as ex:
             self.logger.Error("RequestID =>{} ERROR => {}".format(requestId,ex))
-            return Response.error(requestId)
+            return Response.error(requestId),500
         
-        return Response.success(requestId,data=responseData)
+        return Response.success(requestId,data=responseData),200
 
 
     def updateBeneficiarySourceType(self,data,primaryKey):
@@ -32,7 +32,7 @@ class BeneficiarySourceTypeService:
         try:
             if(self.data.beneficiarySourceTypeRepository.IsExists(primaryKey) is False):
                 self.logger.Info(r"REQUESTID => {}Beneficiary source type doesn't exist.".format(requestId))
-                return  Response.error(requestId,"Beneficiary source type doesn't exist.",responseCode="02")    
+                return  Response.error(requestId,"Beneficiary source type doesn't exist.",responseCode="02"),404 
 
             updatedRowCount = self.data.beneficiarySourceTypeRepository.update(data,primaryKey)
             if updatedRowCount <= 0 : 
@@ -44,13 +44,13 @@ class BeneficiarySourceTypeService:
         
         except IntegrityError:
             self.logger.Error("RequestID =>{} ERROR => {}".format(requestId,IntegrityError))
-            return Response.error(requestId,message="Name already exists",responseCode="02")
+            return Response.error(requestId,message="Name already exists",responseCode="02"),409
 
         except Exception as ex:
             self.logger.Error("RequestID =>{} ERROR => {}".format(requestId,ex))
-            return Response.error(requestId)
+            return Response.error(requestId),500
             
-        return Response.success(requestId,data=message)
+        return Response.success(requestId,data=message),200
 
 
     def createBeneficiarySourceType(self,data):
@@ -64,13 +64,13 @@ class BeneficiarySourceTypeService:
 
         except IntegrityError:
             self.logger.Error("RequestID =>{} ERROR => {}".format(requestId,IntegrityError))
-            return Response.error(requestId,message="Name already exists",responseCode="02")
+            return Response.error(requestId,message="Name already exists",responseCode="02"),409
 
         except Exception as ex:
             self.logger.Error("RequestID =>{} ERROR => {}".format(requestId,ex))
-            return Response.error(requestId)
+            return Response.error(requestId),500
         
-        return Response.success(requestId,message=message,data=responseData)
+        return Response.success(requestId,message=message,data=responseData),201
 
     
     def deleteBeneficiarySourceType(self, primaryKey):
@@ -78,7 +78,7 @@ class BeneficiarySourceTypeService:
         try:
             if(self.data.beneficiarySourceTypeRepository.IsExists(primaryKey) is False):
                 self.logger.Info(r"REQUESTID => {}Beneficiary source type doesn't exist.".format(requestId))
-                return  Response.error(requestId,"Beneficiary source type doesn't exist.",responseCode="02")
+                return  Response.error(requestId,"Beneficiary source type doesn't exist.",responseCode="02"),404
             
             deletedRowCount = self.data.beneficiarySourceTypeRepository.delete(primaryKey);
 
@@ -91,6 +91,6 @@ class BeneficiarySourceTypeService:
             
         except Exception as ex :
             self.logger.Error("RequestID =>{} ERROR => {}".format(requestId,ex))
-            return Response.error(requestId)
+            return Response.error(requestId),500
         
-        return Response.success(requestId,data=message)
+        return Response.success(requestId,data=message),200
