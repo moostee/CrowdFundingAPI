@@ -30,7 +30,7 @@ class UserService:
             if not response['data']:
                 self.logger.Info(r"User with mobile number --> {} could not be onboarded on UMS, n\ requestId => {}".format(
                     formatedData['mobileNumber'], self.requestId))
-                return Response.error(self.requestId, error=response['responseMessage'], responseCode='01')
+                return Response.error(self.requestId, error=response['responseMessage'], responseCode='01'),400
             decodedResponse = Jwt.DecodeJWT(
                 response['data']['token'], env('UMS_SECRET'))
             decapitalizedDecodedResponse = {(key[0].lower(
@@ -39,7 +39,7 @@ class UserService:
             if 'id' not in decapitalizedDecodedResponse.keys():
                 self.logger.Info(r"User token --> {} did not contain an id, n\ REQUESTID => {}".format(
                     response['data']['token'], self.requestId))
-                return Response.error(self.requestId, error="Failed to create new user "+response['responseMessage'])
+                return Response.error(self.requestId, error="Unauthorized. Failed to create new user "+response['responseMessage']),401
             data['userId'] = decapitalizedDecodedResponse['id']
             savedUser = self.data.userRepository.create(data)
             token = Jwt.EncodeJWT({'id': str(
@@ -48,11 +48,11 @@ class UserService:
                 formatedData['mobileNumber'], self.requestId))
             savedUserSerializer = UserSerializer(savedUser, many=False).data
             savedUserSerializer['token'] = token
-            return Response.success(self.requestId, data=savedUserSerializer)
+            return Response.success(self.requestId, data=savedUserSerializer),201
         except BaseException as ex:
             self.logger.Info(r"User with mobile number --> {} could not be onboarded. An exception occured: {}, n\ REQUESTID => {}".format(
                 formatedData['mobileNumber'], str(ex), self.requestId))
-            return Response.error(self.requestId, error=str(ex))
+            return Response.error(self.requestId, error=str(ex)),500
 
     def verifyUser(self, data, clientSecret):
         try:
@@ -62,7 +62,7 @@ class UserService:
                 env('UMS_URL')+"/account/signin",
                 json.dumps(formatedData),
                 headers={"Content-Type": "application/json", "client-secret": clientSecret})
-            if 'data' in response:
+            if response['data']:
                 if ('token' in response["data"]):
                     decodedToken = Jwt.DecodeJWT(
                         response["data"]["token"], env('UMS_SECRET'))
@@ -77,14 +77,14 @@ class UserService:
                         )
             else:
                 self.logger.Info(
-                    r"The user with mobile number {} could not be authenticated, \n REQUESTID => {}".format(formatedData['mobileNumber'], self.requestId))
-                return Response.error(self.requestId, error=response["message"], responseCode='02')
+                    r"The user with details: {} could not be authenticated, \n REQUESTID => {}".format(formatedData, self.requestId))
+                return Response.error(self.requestId, message=response["responseMessage"], error=response["responseMessage"], responseCode='02'),401
         except Exception as exception:
             self.logger.Info(
-                r"User with mobile number --> {} could not be onboarded, An exception occured: {},  \n REQUESTID --> {}".format(formatedData["mobileNumber"], str(exception), self.requestId))
-            return Response.error(self.requestId, error=str(exception))
+                r"User with detials --> {} could not be onboarded, An exception occured: {},  \n REQUESTID --> {}".format(formatedData, str(exception), self.requestId))
+            return Response.error(self.requestId, error=str(exception)),500
         self.logger.Info(
             r"User with mobile number --> {} was successfully logged in, \n REQUESTID --> {}".format(payload["mobileNumber"], self.requestId))
         userSerializer = UserSerializer(user, many=False).data
         userSerializer['token'] = token
-        return Response.success(self.requestId, data=userSerializer)
+        return Response.success(self.requestId, data=userSerializer),200
