@@ -19,13 +19,13 @@ class FundingTransaction(BaseModel):
         (FAILED, _('failed transaction')),
     ]
 
-    userId = models.ForeignKey(User, on_delete=models.CASCADE)
-    fundingId = models.ForeignKey(Funding, on_delete=models.CASCADE)
-    fundingSourceId = models.ForeignKey(FundingSource, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    funding = models.ForeignKey(Funding, on_delete=models.CASCADE)
+    fundingSource = models.ForeignKey(FundingSource, on_delete=models.CASCADE)
     amount = models.FloatField(default=0.0)
     currency = models.CharField(max_length=100)
     paymentTransactionRef = models.CharField(max_length=255)
-    issuerId = models.ForeignKey(Issuer, on_delete=models.CASCADE)
+    issuer = models.ForeignKey(Issuer, on_delete=models.CASCADE)
     status = models.CharField(
         default=PENDING,
         choices=STATUS,

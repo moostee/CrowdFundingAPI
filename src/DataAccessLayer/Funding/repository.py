@@ -1,4 +1,6 @@
 from DataAccessLayer.BaseRepository import BaseRepository
 
 class FundingRepository(BaseRepository):
-    pass
+
+    def doesBeneficiaryExist(self, beneficiaryId, fundingGroupId):
+        return self.model.objects.filter(beneficiary=beneficiaryId, fundingGroup=fundingGroupId).exists()

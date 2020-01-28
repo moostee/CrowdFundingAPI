@@ -22,4 +22,4 @@ class ValidateUserRole:
             return response
         else:
             self.logger.Info(r"Unauthorized Access. User {} attempting to access {} without admin rights. n\ REQUESTID => {}".format(request.authUser['id'], request.path, requestId))
-            return Response(ResponseWrapper.error(requestId, message='Access Denied. You lack the permission to access this route', responseCode='02'), status.HTTP_401_UNAUTHORIZED)
+            return Response(ResponseWrapper.error(requestId, message='Access Denied. You lack the permission to access this route', responseCode='02'), status=403)

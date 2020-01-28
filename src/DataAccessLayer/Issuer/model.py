@@ -14,7 +14,7 @@ class Issuer(BaseModel):
     ]
 
     name = models.CharField(max_length=100, unique=True)
-    referenceTypeMaxChar = models.IntegerField()
+    referenceTypeMaxChar = models.PositiveSmallIntegerField()
     referenceType =  models.CharField(
         max_length=32,
         choices=REFERENCETYPES,

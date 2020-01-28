@@ -18,6 +18,7 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
             allowed = set(fields)
             existing = set(self.fields)
             for field_name in existing - allowed:
+                if field_name == 'isDeleted': pass
                 self.fields.pop(field_name)
     
     def to_representation(self, instance):

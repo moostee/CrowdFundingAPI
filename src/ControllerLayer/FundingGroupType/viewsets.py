@@ -25,11 +25,13 @@ class FundingGroupTypeList(APIView):
 
         if(validData.is_valid() is False):
             self.logger.Info(r"Create Funding Group Type. Failed validation with: {}, n\ REQUESTID => {}".format(str(validData.errors), requestId))
-            return Response(ResponseWrapper.error(requestId, error=validData.errors, responseCode='01'))
-        return Response(self.fundingGroupTypeService.createFundingGroupType(validData.data))
+            return Response(ResponseWrapper.error(requestId, error=validData.errors, responseCode='01'), 400)
+        response, status = self.fundingGroupTypeService.createFundingGroupType(validData.data)
+        return Response(response, status=status)
 
     def get(self,request,format=None):
-        return Response(self.fundingGroupTypeService.getAllFundingGroupType())
+        response, status = self.fundingGroupTypeService.getAllFundingGroupType()
+        return Response(response, status=status)
 
 class FundingGroupTypeDetail(APIView):
     def __init__(self):
@@ -37,13 +39,16 @@ class FundingGroupTypeDetail(APIView):
         self.logger = Logger('ControllerLayer.FundingGroupTypeDetail')
 
     def get(self, request, pk, format=None):
-        return Response(self.fundingGroupTypeService.getOneFundingGroupType(pk))
+        response, status = self.fundingGroupTypeService.getOneFundingGroupType(pk)
+        return Response(response, status)
 
     @method_decorator(ValidateUserRole)
     def put(self, request, pk, format=None):
-        return Response(self.fundingGroupTypeService.updateFundingGroupType(pk, request.data))
+        response, status = self.fundingGroupTypeService.updateFundingGroupType(pk, request.data)
+        return Response(response, status)
     
     @method_decorator(ValidateUserRole)
     def delete(self, request, pk, format=None):
-        return Response(self.fundingGroupTypeService.deleteFundingGroupType(pk))
+        response, status = self.fundingGroupTypeService.deleteFundingGroupType(pk)
+        return Response(response, status)
     
