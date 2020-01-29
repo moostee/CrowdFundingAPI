@@ -6,7 +6,8 @@ src/crowdfunding_api/.env
 src/ubacrown/
 src/db.sqlite3
 src/crowdfunding_api/Logs/*.log
-src/DataAccessLayer/migrations/*0.py
+src/DataAccessLayer/migrations/**
+!src/DataAccessLayer/migrations/__init__.py
 
 # Created by https://www.gitignore.io/api/python,windows,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=python,windows,visualstudiocode
