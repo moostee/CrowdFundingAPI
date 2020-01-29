@@ -68,6 +68,10 @@ MIDDLEWARE = [
 
 # Allows any client access.
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_HEADERS = [
+    'client-secret',
+    'Authorization'
+]
 
 ROOT_URLCONF = 'crowdfunding_api.urls'
 
