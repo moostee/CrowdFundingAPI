@@ -15,14 +15,8 @@ class UserSignup(APIView):
         self.UserService = service()
 
     def post(self, request, format=None):
-        requestId = uuid.uuid4()
-        validData = UserSerializer(data=request.data)
         client_secret = request.META.get('HTTP_CLIENT_SECRET')
-        if(not validData.is_valid()):
-            self.logger.Info(r"User signup. Failed validation with: {}, n\ REQUESTID => {}".format(
-                str(validData.errors), requestId))
-            return Response(ResponseWrapper.error(requestId, message="Validation error occured processing request", error=validData.errors, responseCode='01'), status=400)
-        response,status = self.UserService.createUser(validData.data, client_secret)
+        response,status = self.UserService.createUser(request.data, client_secret)
         return Response(response, status=status)
 
 

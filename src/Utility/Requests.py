@@ -4,6 +4,7 @@ import requests as request
 class Request:
     '''An API Request class wrapper for all HTTP requests'''
 
+    
     @staticmethod
     def post(url, data, params=None, headers=None):
         """Returns a json data of the HTTP POST request"""
