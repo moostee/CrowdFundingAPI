@@ -29,20 +29,20 @@ class UserService:
             
             if self.data.userRepository.checkPhoneNumberExist(data['phoneNumber']):
                 self.logger.Info(r"User with details --> {} already exists. Phone number duplication, n\ REQUESTID => {}".format(data, self.requestId))
-                return Response.error(self.requestId, error="Integrity error. User with Identity exists."),409
+                return Response.error(self.requestId, error="Integrity error. User with Identity exists.", responseCode='01'),409
 
             headers = {'client-secret': client_secret,'Content-Type': 'application/json'}
             formatedData = {('mobileNumber' if key == 'phoneNumber' else key): value for (key, value) in data.items()}
-            response = Request.post(env('UMS_URL')+"/account/signup", json.dumps(formatedData), headers=headers)
+            response = Request.post(env('UMS_URL')+"/account/signup", json.dumps(formatedData), headers=headers)            
             
-            if response.status_code == 400:
-                self.logger.Info(r"Bad request to UMS --> with error {} , n\ REQUESTID => {}".format(data, self.requestId))
-                return Response.error(self.requestId, error="Bad request. An error occured. "+str(response['errors'])),400
-
-            if not response['data']:
+            if 'data' not in response:  
+                if 'status' in response:             
+                    self.logger.Info(r"Bad request to UMS --> with error {} , n\ REQUESTID => {}".format(data, self.requestId))
+                    return Response.error(self.requestId, error="Bad request. An error occured. "+str(response['errors']),responseCode="01"),400
+            elif response['data'] is None:
                 self.logger.Info(r"User with data --> {} could not be onboarded on UMS, n\ requestId => {}".format(formatedData, self.requestId))
                 return Response.error(self.requestId, error=response['responseMessage'], responseCode='01'),400
-            
+
             decodedResponse = Jwt.DecodeJWT(response['data']['token'], env('UMS_SECRET'))
             decapitalizedDecodedResponse = {(key[0].lower()+key[1:]): value for (key, value) in json.loads(decodedResponse['actort']).items()}
 
