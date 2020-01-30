@@ -13,4 +13,4 @@ class Jwt:
 
     @staticmethod
     def DecodeJWT(encodedJWT, secret, theAlgorithm=['HS256']):
-        return jwt.decode(encodedJWT, secret, algorithm=theAlgorithm)
+        return jwt.decode(encodedJWT, secret, algorithm=theAlgorithm, leeway=datetime.timedelta(hours=2))
