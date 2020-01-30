@@ -39,6 +39,6 @@ class Authentication:
                 decodedUserObj = Jwt.DecodeJWT(tokenString, env('JWT_SECRET'))
                 request.authUser = decodedUserObj
                 return None
-            except:
-                self.logger.Info(r"Unauthorized Access. Invalid Token in accessing {} n\ REQUESTID => {}".format(request.path, requestId))
+            except BaseException as ex:
+                self.logger.Info(r"Unauthorized Access. Invalid Token in accessing {} with error {} n\ REQUESTID => {}".format(request.path,str(ex),requestId))
                 return Response(ResponseWrapper.error(requestId, message='Invalid Token', responseCode='02'), status.HTTP_401_UNAUTHORIZED)
