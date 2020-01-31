@@ -12,11 +12,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import logging.config
 import os
-import environ
 from datetime import date
 
-env = environ.Env()
-environ.Env.read_env()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -100,11 +97,11 @@ WSGI_APPLICATION = 'crowdfunding_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE':   'django.db.backends.postgresql',
-        'NAME':     env('DATABASE_NAME'),
-        'USER':     env('DATABASE_USER'),
-        'PASSWORD': env('DATABASE_PASSWORD'),
-        'HOST':     env('DATABASE_HOST'),
-        'PORT':     env('DATABASE_PORT'),
+        'NAME':     os.environ.get('DATABASE_NAME'),
+        'USER':     os.environ.get('DATABASE_USER'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        'HOST':     os.environ.get('DATABASE_HOST'),
+        'PORT':     os.environ.get('DATABASE_PORT'),
     }
 }
 
