@@ -1,4 +1,3 @@
-import environ
 from rest_framework.response import Response
 from ..jwt import Jwt
 from rest_framework.renderers import JSONRenderer
@@ -7,11 +6,12 @@ from Utility.Response import Response as ResponseWrapper
 from Utility.Utility import Utility
 import uuid
 from Utility.logger import Logger
+import os
 
-env = environ.Env()
-environ.Env.read_env()
+jwt_secret = os.environ.get('JWT_SECRET')
 
-class Authentication:
+class Authentication:   
+
     def __init__(self, get_response):
         self.get_response = get_response
         Response.accepted_renderer = JSONRenderer()
@@ -36,7 +36,7 @@ class Authentication:
         else:
             try:
                 tokenString = token.split(' ')[1]
-                decodedUserObj = Jwt.DecodeJWT(tokenString, env('JWT_SECRET'))
+                decodedUserObj = Jwt.DecodeJWT(tokenString, jwt_secret)
                 request.authUser = decodedUserObj
                 return None
             except BaseException as ex:
