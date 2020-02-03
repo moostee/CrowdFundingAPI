@@ -22,7 +22,7 @@ class UserService:
         self.data = DataModule()
         self.logger = Logger('LogicLayer.UserService')
 
-    def createUser(self, data, client_secret):
+    def createUser(self, data, clientSecret):
         
         requestId = uuid.uuid4()
         try:
@@ -31,14 +31,14 @@ class UserService:
                 self.logger.Info(r"User signup. Failed validation with: {}, n\ REQUESTID => {}".format(str(validData.errors), requestId))
                 return Response.error(requestId, message="Validation error occured processing request", error=validData.errors, responseCode='01'),400
             
-            if client_secret is None:
+            if clientSecret is None:
                 return Response.error(requestId, error="Invalid Access Token",responseCode="01"),401
 
             if self.data.userRepository.checkPhoneNumberExist(data['phoneNumber']):
                 self.logger.Info(r"User with details --> {} already exists. Phone number duplication, n\ REQUESTID => {}".format(data, requestId))
                 return Response.error(requestId, error="Integrity error. User with Identity exists.", responseCode='01'),409
 
-            headers = {'client-secret': client_secret,'Content-Type': 'application/json'}
+            headers = {'client-secret': clientSecret,'Content-Type': 'application/json'}
             formatedData = {('mobileNumber' if key == 'phoneNumber' else key): value for (key, value) in data.items()}
             response = Request.post(ums_url+"/account/signup", json.dumps(formatedData), headers=headers)            
             
@@ -66,6 +66,9 @@ class UserService:
             savedUserSerializer = UserSerializer(savedUser, many=False).data
             savedUserSerializer['token'] = token
             return Response.success(requestId, data=savedUserSerializer),201
+        except ValueError as err:
+            self.logger.Info(r"Unknown Client Access. Invalid client-secret ({}) with error {} n\ REQUESTID => {}".format(clientSecret,str(err),requestId))
+            return Response.error(requestId,error="Invalid Client Secret.", responseCode="02"),401   
         except BaseException as ex:
             self.logger.Error("RequestID =>{} ERROR => {}".format(requestId,ex))
             return Response.error(requestId, error=str(ex)),500
@@ -77,9 +80,6 @@ class UserService:
             if not validData.is_valid():
                 self.logger.Info(r"User Login. Failed validation with: {}, n\ REQUESTID => {}".format(str(validData.errors), requestId))
                 return Response.error(requestId, error=validData.errors),400
-        
-            if clientSecret is None:
-                return Response.error(requestId, error={"auth" : "Invalid access token"},responseCode="01"),401
 
             formatedData = {('mobileNumber' if key == 'phoneNumber' else key): value for (key, value) in data.items()}
             response = Request.post(ums_url+"/account/signin",json.dumps(formatedData),headers={"Content-Type": "application/json", "client-secret": clientSecret})
@@ -102,7 +102,9 @@ class UserService:
             userSerializer = UserSerializer(user, many=False).data
             userSerializer['token'] = token
             self.logger.Info(r"User with details --> {} was successfully logged in, \n REQUESTID --> {}".format(payload, requestId))
-                
+        except ValueError as err:
+            self.logger.Info(r"Unknown Client Access. Invalid client-secret ({}) with error {} n\ REQUESTID => {}".format(clientSecret,str(err),requestId))
+            return Response.error(requestId,error="Invalid Client Secret.", responseCode="02"),401       
         except Exception as ex:
             self.logger.Error("RequestID =>{} ERROR => {}".format(requestId,ex))
             return Response.error(requestId, error=str(ex)),500        
@@ -113,4 +115,3 @@ class UserService:
         userSerializerDataKeys = ['firstName', 'lastName', 'phoneNumber']
         UserSerializerData = {key:data[key] for key in userSerializerDataKeys}
         return UserSerializerData
-        # userSerializerData = {('mobileNumber' if key == 'phoneNumber' else key): value for (key, value) in data.items()}
