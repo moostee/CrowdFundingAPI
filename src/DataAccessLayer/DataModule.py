@@ -18,6 +18,11 @@ from DataAccessLayer.Role.repository import RoleRepository
 from DataAccessLayer.Role.model import Role
 from DataAccessLayer.BeneficiarySourceType.repository import BeneficiarySourceTypeRepository
 from DataAccessLayer.BeneficiarySourceType.model import BeneficiarySourceType
+from DataAccessLayer.BeneficiarySource.repository import BeneficiarySourceRepository
+from DataAccessLayer.BeneficiarySource.model import BeneficiarySource
+from DataAccessLayer.BeneficiarySourceProperty.repository import BeneficiarySourcePropertyRepository
+from DataAccessLayer.BeneficiarySourceProperty.model import BeneficiarySourceProperty
+
 
 
 class DataModule:
@@ -42,3 +47,7 @@ class DataModule:
         self.roleRepository = RoleRepository(Role)
         
         self.beneficiarySourceTypeRepository = BeneficiarySourceTypeRepository(BeneficiarySourceType)
+
+        self.beneficiarySourceRepository = BeneficiarySourceRepository(BeneficiarySource)
+
+        self.beneficiarySourcePropertyRepository = BeneficiarySourcePropertyRepository(BeneficiarySourceProperty)
