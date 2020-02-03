@@ -1,8 +1,8 @@
 from django.db import models
 from ..BaseModel import BaseModel
-from ..BeneficiarySourceType.model import BeneficiarySourceType
+from ..BeneficiarySource.model import BeneficiarySource
 
 class BeneficiarySourceProperty(BaseModel):
-    beneficiarySourceType = models.ForeignKey(BeneficiarySourceType, on_delete=models.CASCADE)
+    beneficiarySource = models.ForeignKey(BeneficiarySource, on_delete=models.CASCADE)
     propertyType = models.CharField(default=False,max_length=100)
     propertyValue = models.CharField(null=False, max_length=100)
