@@ -9,13 +9,10 @@ FundingSourceTypeGetResponse, FundingSourceTypePostResponse, FundingSourceTypeUp
 from Utility.Response import Response as ResponseWrapper
 from Utility.Utility import Utility
 from Utility.middlewares.validateUserRole import ValidateUserRole
-from Utility.logger import Logger
-import uuid
 
 class FundingSourceTypeList(APIView):
     def __init__(self):
         self.fundingSourceTypeService = service()
-        self.logger = Logger('LogicLayer.FundingSourceTypeList')
 
     @swagger_auto_schema(responses={201: FundingSourceTypePostResponse, 400 : "Bad Request"},
     request_body=FundingSourceTypeSerializer(fields=swaggerFieldSchema))
@@ -33,14 +30,14 @@ class FundingSourceTypeList(APIView):
 class FundingSourceTypeDetail(APIView):
     def __init__(self):
         self.fundingSourceTypeService = service()
-        self.logger = Logger('LogicLayer.FundingSourceTypeList')
 
     @swagger_auto_schema(responses={200: FundingSourceTypeGetOneResponse, 400 : "Bad Request"})
     def get(self, request, pk,format=None):
         response, status = self.fundingSourceTypeService.getOneFundingSourceType(pk)
         return Response(response, status=status)
 
-    @swagger_auto_schema(responses={200: FundingSourceTypeUpdateResponse, 400 : "Bad Request"})
+    @swagger_auto_schema(responses={200: FundingSourceTypeUpdateResponse, 400 : "Bad Request"},
+    request_body=FundingSourceTypeSerializer(fields=swaggerFieldSchema))
     @method_decorator(ValidateUserRole)
     def put(self, request, pk, format=None):
         response, status = self.fundingSourceTypeService.updateFundingSourceType(pk, request.data)
