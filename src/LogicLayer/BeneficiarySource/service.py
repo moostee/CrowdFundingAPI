@@ -109,7 +109,7 @@ class BeneficiarySourceService:
             if deletedUserBeneficiarySourceProperty <= 0:
                 self.logger.Info("could not delete beneficiary source property for beneficiarysource id=> {0},n\ REQUESTID => {1}".format(beneficiarySourceId,requestId))
 
-            self.logger.Info("deleted beneficiary source property for beneficiarysource id => {0},n\ REQUESTID => {1}".format(beneficiarySourceId,requestId)) : 
+            self.logger.Info("deleted beneficiary source property for beneficiarysource id => {0},n\ REQUESTID => {1}".format(beneficiarySourceId,requestId)) 
            
             self.logger.Info("Successfully created beneficiary source for user {0},n\ REQUESTID => {1}".format(userId,requestId))
 
