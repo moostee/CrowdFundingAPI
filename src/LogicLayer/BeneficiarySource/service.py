@@ -41,12 +41,12 @@ class BeneficiarySourceService:
                 return Response.error(requestId,message="Validation Error",responseCode="01",error=validData.errors),400
 
             #validate issuer exists
-            if self.data.issuerRepository.IsExists(validData.data['issuerId']) is False:
+            if not self.data.issuerRepository.IsExists(validData.data['issuerId']):
                 self.logger.Info("Issuer Id not found{0},n\ REQUESTID => {1}".format(userId,requestId))
                 return Response.error(requestId,message="Issuer does not exist, kindly contact the admin.",responseCode="01"),404
 
             #validate beneficiarySourceType exists
-            if self.data.beneficiarySourceTypeRepository.IsExists(validData.data['beneficiarySourceTypeId']) is False:
+            if not self.data.beneficiarySourceTypeRepository.IsExists(validData.data['beneficiarySourceTypeId']):
                 self.logger.Info("beneficiary source type Id not found{0},n\ REQUESTID => {1}".format(userId,requestId))
                 return Response.error(requestId,message="beneficiary source type does not exist, kindly contact the admin.",responseCode="01"),404
 
