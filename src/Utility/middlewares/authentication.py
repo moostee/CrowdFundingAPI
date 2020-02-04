@@ -1,7 +1,6 @@
 from rest_framework.response import Response
 from ..jwt import Jwt
 from rest_framework.renderers import JSONRenderer
-from rest_framework import status
 from Utility.Response import Response as ResponseWrapper
 from Utility.Utility import Utility
 import uuid
@@ -32,7 +31,7 @@ class Authentication:
 
         if not token:
             self.logger.Info(r"Unauthorized Access. Attempt to access {} without token in header. n\ REQUESTID => {}".format(request.path, requestId))
-            return Response(ResponseWrapper.error(requestId, message='Unauthorized. No token in header', responseCode='02'), status.HTTP_401_UNAUTHORIZED)
+            return Response(ResponseWrapper.error(requestId, message='Unauthorized. No token in header', responseCode='02'), status=401)
         else:
             try:
                 tokenString = token.split(' ')[1]
