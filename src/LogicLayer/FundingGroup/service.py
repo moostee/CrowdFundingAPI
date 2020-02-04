@@ -93,13 +93,13 @@ class FundingGroupService:
         return data['targetGroupDate']
 
     def __cleanUpData(self,data,fundingGroupType,user):
+        data['cycleDuration'] = data['cycleDuration'] if "cycleDuration" in data.keys() else fundingGroupType.defaultCycleDuration
         data['fundingGroupType'] = fundingGroupType
         data['nextCycleDate'] = self.__getNextCycleDate(fundingGroupType,data)
         data["code"] = Utility.randomString(7)
         data['initiator'] = self.data.userRepository.getOne(user['id'])
         fundingSource = self.data.fundingSourceRepository.getOne(data.pop('fundingSource', None))
         beneficiarySource =  self.data.beneficiarySourceRepository.getOne(data.pop('beneficiarySource', None))
-        data['cycleDuration'] = data['cycleDuration'] or fundingGroupType.cycleDuration
         return data,fundingSource,beneficiarySource
     
     def __getFundingGroupUser(self,data,fundingGroup,fundingSource,beneficiarySource,role):
