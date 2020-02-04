@@ -13,7 +13,7 @@ class BeneficiarySourceService:
     def getFundingSourcesForUser(self,userId):
         
         try:
-            requestId = uuid.uuid4();
+            requestId = uuid.uuid4()
             if self.data.beneficiarySourceRepository.HasBeneficiarySource(userId) is False:
                 self.logger.Info("User -->{0}does not have a beneficiary source(s), n\ REQUESTID =>{1}".format(userId,requestId))
                 return Response.success(requestId,"User does not have any beneficiary source(s)",responseCode="03"),404
@@ -46,7 +46,7 @@ class BeneficiarySourceService:
                 return Response.error(requestId,message="Issuer does not exist, kindly contact the admin.",responseCode="01"),404
 
             #validate beneficiarySourceType exists
-            if self.data.issuerRepository.IsExists(validData.data['beneficiarySourceTypeId']) is False:
+            if self.data.beneficiarySourceTypeRepository.IsExists(validData.data['beneficiarySourceTypeId']) is False:
                 self.logger.Info("beneficiary source type Id not found{0},n\ REQUESTID => {1}".format(userId,requestId))
                 return Response.error(requestId,message="beneficiary source type does not exist, kindly contact the admin.",responseCode="01"),404
 
