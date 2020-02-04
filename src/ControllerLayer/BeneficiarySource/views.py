@@ -21,10 +21,15 @@ class BeneficiarySourceForUserList(APIView):
     def post(self, request, format=None):
         userId = request.authUser['id']        
         data, status = self.logic.beneficiarySource.createBeneficiarySourcesForUser(userId, request.data)
-        return Response(data,status=status)
+        return Response(data,status=status)    
 
+
+class BeneficiarySourceForUserDetails(APIView):
+    def __init__(self):
+        self.logic = LogicModule();
+        
     @swagger_auto_schema(responses={200: BS_DeleteResponseSerializer,400: ErrorResponseSerializer,500 : ServerErrorResponseSerializer,404 : ErrorResponseSerializer })
-    def delete(self, request, format=None):
+    def delete(self, request, beneficiarySourceId, format=None):
         userId = request.authUser['id']
-        data, status = self.logic.beneficiarySource.deleteBeneficiarySourcesForUser(userId, request.data)
+        data, status = self.logic.beneficiarySource.deleteBeneficiarySourcesForUser(userId, beneficiarySourceId)
         return Response(data,status=status)

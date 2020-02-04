@@ -81,32 +81,32 @@ class BeneficiarySourceService:
 
 
 
-    def deleteBeneficiarySourcesForUser(self,userId,data):
+    def deleteBeneficiarySourcesForUser(self,userId,beneficiarySourceId):
         
         try:
             requestId = uuid.uuid4()
 
-            validData = DeleteBeneficiarySourceSerializer(data=data)
-            if(validData.is_valid() is False): return Response.error(requestId,message="Validation Error",responseCode="01",error=validData.errors),400
-            data = validData.data;
-            if self.data.beneficiarySourceRepository.IsExists(data['beneficiaryId']) is False:
+            if not self.data.beneficiarySourceRepository.IsExists(beneficiarySourceId):
                 self.logger.Info(" -->{0}beneficiary source does not exist, n\ REQUESTID =>{1}".format(userId,requestId))
                 return Response.success(requestId,"beneficiary source does not exist",responseCode="03"),404            
 
-            if self.data.beneficiarySourceRepository.HasBeneficiarySource(userId) is False:
+            if not self.data.beneficiarySourceRepository.HasBeneficiarySource(userId):
                 self.logger.Info("User -->{0}does not have a beneficiary source(s), n\ REQUESTID =>{1}".format(userId,requestId))
                 return Response.success(requestId,"User does not have any beneficiary source(s)",responseCode="03"),404
             
-            if self.data.beneficiarySourceRepository.CheckUserIsTiedToBeneficiarySource(userId,data['beneficiaryId']) is False:
+            if not self.data.beneficiarySourceRepository.CheckUserIsTiedToBeneficiarySource(userId,beneficiarySourceId):
                 self.logger.Info("User -->{0}doesn't have this beneficiary source(s), n\ REQUESTID =>{1}".format(userId,requestId))
                 return Response.success(requestId,"User does not have this beneficiary source(s)",responseCode="03"),404
             
-            deletedUserBeneficiarySource = self.data.beneficiarySourceRepository.DeleteUserBeneficiarySource(userId,data['beneficiaryId'])
+            deletedUserBeneficiarySource = self.data.beneficiarySourceRepository.DeleteUserBeneficiarySource(userId, beneficiarySourceId)
 
             if deletedUserBeneficiarySource <= 0:
-                self.logger.Info(r"""REQUESTID => {} n\ Beneficiary source with ID => {} could not be deleted.""".format(requestId,validData['beneficiaryId']))
+                self.logger.Info(r"""REQUESTID => {} n\ Beneficiary source with ID => {} could not be deleted.""".format(requestId,beneficiarySourceId))
                 return Response.error(requestId,"Delete not successful. Please try again later.",responseCode="03"),200
 
+            deletedUserBeneficiarySourceProperty = self.data.beneficiarySourcePropertyRepository.DeleteByBeneficiarySourceId(beneficiarySourceId)
+            deletedUserBeneficiarySourceProperty > 0 ? self.logger.Info("deleted beneficiary source property for beneficiarysource id => {0},n\ REQUESTID => {1}".format(beneficiarySourceId,requestId)) : self.logger.Info("could not delete beneficiary source property for beneficiarysource id=> {0},n\ REQUESTID => {1}".format(beneficiarySourceId,requestId))
+           
             self.logger.Info("Successfully created beneficiary source for user {0},n\ REQUESTID => {1}".format(userId,requestId))
 
         except Exception as exception :
