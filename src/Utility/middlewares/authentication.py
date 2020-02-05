@@ -40,4 +40,4 @@ class Authentication:
                 return None
             except BaseException as ex:
                 self.logger.Info(r"Unauthorized Access. Invalid Token in accessing {} with error {} n\ REQUESTID => {}".format(request.path,str(ex),requestId))
-                return Response(ResponseWrapper.error(requestId, message='Invalid Token', responseCode='02'), status.HTTP_401_UNAUTHORIZED)
+                return Response(ResponseWrapper.error(requestId, message='Invalid Token', responseCode='02'), 401)

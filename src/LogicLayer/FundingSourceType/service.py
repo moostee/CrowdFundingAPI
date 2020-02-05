@@ -20,10 +20,9 @@ class FundingSourceTypeService:
 
             if not validData.is_valid():
                 self.logger.Info(r"Create Funding Source Type. Failed validation with: {}, n\ REQUESTID => {}".format(str(validData.errors), requestId))
-                return Response.error(requestId, error=validData.errors), 400
+                return Response.error(requestId, error=validData.errors,responseCode="03"), 400
 
-            formattedData = Utility.convertFieldValueToLowerCase(data, 'name')
-            savedData = self.data.fundingSourceTypeRepository.create(formattedData)
+            savedData = self.data.fundingSourceTypeRepository.SaveFundingSourceType(validData.data['name'],validData.data['config'])
             self.logger.Info(r"Funding  Source Type With Id --> {} was successfully created, n\ REQUESTID => {}".format(FundingSourceTypeSerializer(savedData).data['id'], requestId))
             return Response.success(requestId, data=FundingSourceTypeSerializer(savedData).data), 201
         
@@ -76,7 +75,6 @@ class FundingSourceTypeService:
 
             updatedData = self.data.fundingSourceTypeRepository.update(dataToUpdate, pk)
             self.logger.Info(r"Successfully updated funding source type with id --> {}, n\ REQUESTID => {}".format(pk, requestId))
-            print('1 ================>', updatedData)
             return Response.success(requestId, message='Funding Source Type has been successfully updated', data=FundingSourceTypeSerializer(updatedData).data), 200
 
         except BaseException as ex:
