@@ -51,6 +51,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'Utility.middlewares.clientSecret.ClientSecret',
+
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
