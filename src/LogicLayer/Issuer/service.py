@@ -19,7 +19,7 @@ class IssuerService:
             if not validData.is_valid():
                 self.logger.Info(r"Issuer with data \"{}\" could not be validated  with error {} n\ REQUESTID => {}".format(data,validData.errors,self.requestId))
                 return Response.error(self.requestId, error=validData.errors, responseCode='01')
-            savedIssuer = self.data.issuerRepository.create(data)
+            savedIssuer = self.data.issuerRepository.create(validData.data)
             self.logger.Info(r"Issuer with name --> {} was successfully created, n\ REQUESTID => {}".format(data['name'],self.requestId))
             return Response.success(self.requestId, data=IssuerSerializer(savedIssuer,many=False).data)
         except IntegrityError:

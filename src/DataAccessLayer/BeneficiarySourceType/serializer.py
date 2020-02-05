@@ -12,6 +12,5 @@ class BeneficiarySourceTypeSerializer(DynamicFieldsModelSerializer):
     def to_internal_value(self, instance):
         ret = super().to_internal_value(instance)
         ret['name'] = ret['name'].lower()
-        ret['updatedAt'] = timezone.localtime(timezone.now())
         return ret
 

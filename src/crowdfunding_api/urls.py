@@ -8,9 +8,9 @@ from ControllerLayer.default.viewsets import DefaultViewSet
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Python AppStructure API",
+        title="CrowdFunding API",
         default_version='v1',
-        description="Python Application Structure",
+        description="Crowdfunding Application",
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="ubainnovate@ubagroup.com"),
         license=openapi.License(name="BSD License"),
@@ -32,4 +32,5 @@ urlpatterns = [
     path('api/roles/', include('ControllerLayer.Role.urls')),
     path('api/beneficiarysourcetypes/', include('ControllerLayer.BeneficiarySourceType.urls')),
     path('api/fundings/', include('ControllerLayer.Funding.urls')),
+    path('api/beneficiarysource/', include('ControllerLayer.BeneficiarySource.urls'))    
 ]
