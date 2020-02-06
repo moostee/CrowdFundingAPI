@@ -15,11 +15,8 @@ class BaseRepository:
 
     def update(self, dataToUpdate, primaryKey):
         dataToUpdate['updatedAt'] = timezone.now()
-        print('1 ================>')
         if 'isDeleted' in dataToUpdate.keys(): del dataToUpdate['isDeleted']
-        print('2 ================>')
         self.model.objects.filter(id=primaryKey).update(**dataToUpdate)
-        print('3 ================>')
         return self.getOne(primaryKey)
 
     def delete(self, primaryKey):
