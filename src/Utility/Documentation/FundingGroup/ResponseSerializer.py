@@ -10,6 +10,6 @@ class GetFundingGroupResponseSerializer(serializers.Serializer):
 
 class PostFundingGroupResponseSerializer(serializers.Serializer):
     requestId = serializers.UUIDField(default=uuid.uuid4)
-    message = serializers.CharField(default='Beneficiary source type created successfully')
+    message = serializers.CharField(default='Funding group created successfully')
     responseCode = serializers.CharField(default="00")
     data = FundingGroupSerializer(many=False)

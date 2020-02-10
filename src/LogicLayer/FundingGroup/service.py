@@ -1,4 +1,5 @@
 from DataAccessLayer.FundingGroup.serializer import FundingGroupSerializer
+from DataAccessLayer.FundingGroup.postSerializer import FundingGroupPostSerializer
 from DataAccessLayer.DataModule import DataModule
 from Utility.Response import Response
 from Utility.Utility import Utility
@@ -9,7 +10,6 @@ from django.db import IntegrityError
 from django.core.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
 import json
-from datetime import date
 
 class FundingGroupService:
     def __init__(self):
@@ -21,18 +21,12 @@ class FundingGroupService:
         try:
             adminRole = self.data.roleRepository.getAdmin()
             if 'fundingGroupType' not in data.keys(): raise ValidationError(json.dumps({"fundingGroupType": ["Funding group type is required."]}))
-
-            validData = FundingGroupSerializer(data=data)
+            
+            validData = FundingGroupPostSerializer(data=data)
             if not validData.is_valid(): raise ValidationError(json.dumps(validData.errors))
-            
-            fundingGroupType = self.data.fundingGroupTypeRepository.getOne(data['fundingGroupType'])
-            rules = self.__getRequiredFundingGroupRules(fundingGroupType,data)
-            validate = Validator(data, rules).validate()
 
-            if not validate.isValid:
-                validateError = "failed validation for {} funding group type".format(fundingGroupType.name)
-                raise ValidationError(json.dumps(validate.errors))
-            
+            fundingGroupType = self.data.fundingGroupTypeRepository.getOne(data['fundingGroupType'])
+
             data,fundingSource,beneficiarySource = self.__cleanUpData(data,fundingGroupType,user)
 
             if not fundingSource or not beneficiarySource:
@@ -41,7 +35,7 @@ class FundingGroupService:
 
             savedFundingGroup = self.data.fundingGroupRepository.create(data)
 
-            fundingGroupAdminData = self.__getFundingGroupUser(data,savedFundingGroup,fundingSource,beneficiarySource,adminRole)
+            fundingGroupAdminData = self.__pickFundingGroupUserData(data,savedFundingGroup,fundingSource,beneficiarySource,adminRole)
             self.data.fundingGroupUserRepository.create(fundingGroupAdminData)
 
             self.logger.Info(r"Funding group with id --> {} was successfully created, n\ REQUESTID => {}".format(data,self.requestId))
@@ -67,29 +61,13 @@ class FundingGroupService:
         except Exception:
             self.logger.Info(r"Unable to fetch all Funding group due to exception--> {}, requestId --> {}".format(str(Exception), self.requestId))
             return Response.error(self.requestId, error=str(Exception))
-
-    def __getRequiredFundingGroupRules(self,fundingGroupType,data):
-        rules = {
-            "fundingSource":"uuid",
-            "beneficiarySource": "uuid",
-            "startDate":"after:{}".format(date.today()),
-        }
-        if fundingGroupType.hasFixedIndividualAmount or fundingGroupType.hasFixedGroupAmount:
-            rules['individualAmount'] = 'number'
-            rules['currency'] = 'string'
-        
-        if fundingGroupType.hasMaturityDate:
-            rules['targetGroupDate'] = "after:{}".format(data['startDate'])
-        
-        if fundingGroupType.hasFixedDefaultCycle or fundingGroupType.hasRollingBeneficiary:
-            if not fundingGroupType.defaultCycleDuration or 'cycleDuration' in data:
-                rules['cycleDuration'] = "pattern:\\d+(d|w|m)"
-        
-        return rules
     
     def __getNextCycleDate(self,fundingGroupType,data):
+        duration = ''
         if fundingGroupType.hasFixedDefaultCycle or fundingGroupType.hasRollingBeneficiary:
-            return Utility.computeNextCycleDate(data['cycleDuration'], data['startDate'])
+            if fundingGroupType.defaultCycleDuration: duration = fundingGroupType.defaultCycleDuration
+            else: duration = data['cycleDuration']
+            return Utility.computeNextCycleDate(duration, data['startDate'])
         return data['targetGroupDate']
 
     def __cleanUpData(self,data,fundingGroupType,user):
@@ -102,7 +80,7 @@ class FundingGroupService:
         beneficiarySource =  self.data.beneficiarySourceRepository.getOne(data.pop('beneficiarySource', None))
         return data,fundingSource,beneficiarySource
     
-    def __getFundingGroupUser(self,data,fundingGroup,fundingSource,beneficiarySource,role):
+    def __pickFundingGroupUserData(self,data,fundingGroup,fundingSource,beneficiarySource,role):
         props = ['user', 'fundingGroup', 'userSequence', 'initiator']
         data = {("user" if field == 'initiator' else field):value for (field,value) in data.items() if field in props}
         data['beneficiarySource'] = beneficiarySource

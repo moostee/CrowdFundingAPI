@@ -1,73 +1,77 @@
 import datetime
 import re
 
-class Validator:
-    def __init__(self, data, rules):
-        missingValues = {key:None for key in rules.keys() if key not in data.keys()}
+class Validator:    
+    def __init__(self, data={}, config=[]):
+        self.ruleKeys = [field['field'] for field in config]
+        missingValues = {key:None for key in self.ruleKeys if key not in data.keys()}
         data.update(missingValues)
         self.data = data
-        self.rules = rules
+        self.config = config
         self.errors = {}
         self.isValid = True
-    
-    def string(self,field,value):
-        if not isinstance(value, str): self.__add_error(field,"a string")
+
+    def required(self,field,ruleValue):
+        if ruleValue:
+            if not self.data[field]: self.__add_error(field,"not be empty")
         return self
     
-    def bool(self,field,value):
-        if not isinstance(value, bool): self.__add_error(field,"a boolean")
+    def minLength(self,field,ruleValue):
+        try:
+            if len(self.data[field]) < ruleValue: self.__add_error(field,"at least {} characters.".format(ruleValue))
+        except Exception:
+            return self
         return self
     
-    def number(self,field,value):
+    def maxLength(self,field,ruleValue):
         try:
-            float(value)
+            if len(self.data[field]) > ruleValue: self.__add_error(field,"at most {} characters.".format(ruleValue))
         except Exception:
-            self.__add_error(field,'a number')
-        finally:
             return self
+        return self
     
-    def date(self,field,value):
-        try:
-            y,m,d = value.split('-')
-            datetime.datetime(int(y),int(m),int(d))
+    def minValue(self,field,ruleValue):
+        try: 
+            print('field', field, 'value', ruleValue, self.data[field])
+            if self.data[field] < ruleValue: self.__add_error(field,r"at least %s"%ruleValue)
         except Exception:
-            self.__add_error(field,'a date (yyyy-mm-dd)')
             return self
-        finally:
-            return self
-    
-    def pattern(self,field,value,rule):
-        try:
-            pattern = rule.split(':')[1]
-            if not re.match(pattern,value): self.__add_error(field,r"of pattern: %s"%pattern)
-        except Exception:
-            self.__add_error(field,r"of pattern: %s"%pattern)
-        finally:
-            return self
-    
-    def after(self,field,value,rule):
-        self.date(field,value)
-        dateString = rule.split(':')[1]
-        if value < dateString: self.__add_error(field,r"after %s"%dateString)
         return self
 
-    def enum(self,field,value,rule):
-        enumz = rule.split(':')[1].split(',')
-        if value not in enumz: self.__add_error(field,'one of: '+str(enumz))
+    def type(self,field,ruleValue):
+        if ruleValue == 'string':
+            if not isinstance(self.data[field], str): self.__add_error(field,"be a string")
+        elif ruleValue == 'boolean':
+            if not isinstance(self.data[field], bool): self.__add_error(field,"be a boolean")
+        elif ruleValue == 'number':
+            try: float(self.data[field])
+            except Exception: self.__add_error(field,'be a number')
+        elif ruleValue == 'date':
+            try:
+                if not isinstance(self.data[field],datetime.date):
+                    y,m,d = self.data[field].split('-')
+                    datetime.datetime(int(y),int(m),int(d))
+            except Exception:
+                self.__add_error(field,'be a date (yyyy-mm-dd)')
+        elif ruleValue == 'uuid':
+            try:
+                uuidPattern = '^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
+                if not re.match(uuidPattern,self.data[field]): self.__add_error(field,"be uuid")
+            except Exception:
+                self.__add_error(field,"be uuid")
         return self
-
-    def uuid(self,field,value):
+    
+    def regex(self,field,ruleValue):
         try:
-            pattern = '^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
-            if not re.match(pattern,value): self.__add_error(field,"uuid")
+            if not re.match(ruleValue,self.data[field]): self.__add_error(field,r"of pattern: %s"%ruleValue)
         except Exception:
-            self.__add_error(field,"uuid")
+            self.__add_error(field,r"be of pattern: %s"%ruleValue)
         finally:
             return self
 
     def __add_error(self,field,type):
         self.isValid = False
-        error = r"This field must be {}".format(type)
+        error = r"This field must {}".format(type)
         if field in self.errors.keys():
             self.errors[field].append(error)
             return self
@@ -76,22 +80,20 @@ class Validator:
             return self
     
     def __call_validator(self,rule,field,value):
-        if rule == "string": self.string(field,value)
-        elif rule == "bool": self.bool(field,value)
-        elif rule == "number": self.number(field,value)
-        elif rule == "date": self.date(field,value)
-        elif rule == 'uuid': self.uuid(field,value)
-        elif rule.startswith('pattern'): self.pattern(field,value,rule)
-        elif rule.startswith('enum'): self.enum(field,value,rule)
-        elif rule.startswith('after'): self.after(field,value,rule)
+        if rule == "required": self.required(field,value)
+        elif rule == "minLength": self.minLength(field,value)
+        elif rule == "maxLength": self.maxLength(field,value)
+        elif rule == "minValue": self.minValue(field,value)
+        elif rule == "type": self.type(field,value)
+        elif rule == "regex": self.regex(field,value)
         return self
-
-
+    
     def validate(self):
-        for i in self.rules:
-            if '|' in self.rules[i] and not self.rules[i].startswith('pattern'):
-                for param in self.rules[i].split('|'):
-                    self.__call_validator(param,i,self.data[i])
-            else:
-                self.__call_validator(self.rules[i],i,self.data[i])
+        for field in self.config:
+            innerField = field['field']
+            rules = field['rules']
+            for rule in rules:
+                key = rule['key']
+                value = rule['value']
+                self.__call_validator(key,innerField,value)
         return self

@@ -5,7 +5,7 @@ from ..FundingGroupType.serializer import FundingGroupTypeSerializer
 from ..User.serializer import UserSerializer
 
 class FundingGroupSerializer(DynamicFieldsModelSerializer):
-    fundingGroupType = FundingGroupTypeSerializer(many=False, read_only=True)
+    fundingGroupType = FundingGroupTypeSerializer(many=False)
     initiator = UserSerializer(many=False, read_only=True)
 
     class Meta:
