@@ -18,10 +18,10 @@ class IssuerService:
             validData = IssuerSerializer(data=data)
             if not validData.is_valid():
                 self.logger.Info(r"Issuer with data \"{}\" could not be validated  with error {} n\ REQUESTID => {}".format(data,validData.errors,self.requestId))
-                return Response.error(self.requestId, error=validData.errors, responseCode='01'),400
+                return Response.error(self.requestId, message="Validation error occured", error=validData.errors, responseCode='01'),400
             savedIssuer = self.data.issuerRepository.create(data)
             self.logger.Info(r"Issuer with name --> {} was successfully created, n\ REQUESTID => {}".format(data['name'],self.requestId))
-            return Response.success(self.requestId, data=IssuerSerializer(savedIssuer,many=False).data),201
+            return Response.success(self.requestId,message="Issuer successfully created.", data=IssuerSerializer(savedIssuer,many=False).data),201
         except IntegrityError:
             self.logger.Info(r"Issuer with name --> {} was not created. Issuer already exist. n\ REQUESTID => {}".format(data['name'],self.requestId))
             return Response.error(self.requestId, error=r"{} issuer already exist".format(data['name']), responseCode='01'),409
@@ -47,7 +47,7 @@ class IssuerService:
                 return Response.success(self.requestId, data=IssuerSerializer(issuer, many=False).data),200
             else:
                 self.logger.Info(r"Issuer with id {} does not exist, n\ REQUESTID => {}".format(pk,self.requestId))
-                return Response.error(self.requestId, message=r"Issuer with id {} does not exist.".format(pk)),404
+                return Response.error(self.requestId, message="Issuer does not exist.", error=r"Issuer with id {} does not exist.".format(pk), responseCode="03"),404
         
         except BaseException as ex:
             self.logger.Info(r"Issuers could not be retrieved. An exception occured: {}, n\ REQUESTID => {}".format(str(ex), self.requestId))
@@ -59,11 +59,11 @@ class IssuerService:
             if self.data.issuerRepository.IsExists(pk):
                 formattedData = {key:(value.lower() if type(value) == str else value) for key,value in data.items()}
                 updatedIssuer = self.data.issuerRepository.update(formattedData, pk)
-                self.logger.Info(r"Successfully updated issuer: ID --> {} with {}, requestId --> {}".format(pk,data,self.requestId)),200
-                return Response.success(self.requestId, data=IssuerSerializer(updatedIssuer, many=False).data, message="Issuer successfully updated")
+                self.logger.Info(r"Successfully updated issuer: ID --> {} with {}, requestId --> {}".format(pk,data,self.requestId))
+                return Response.success(self.requestId, data=IssuerSerializer(updatedIssuer, many=False).data, message="Issuer successfully updated"),200
             else:
                 self.logger.Info(r"Issuer with id --> {} was not found, requestId --> {}".format(pk, self.requestId))
-                return Response.error(self.requestId, error=r"Issuer with id {} does not exist".format(pk), responseCode="03"),404
+                return Response.error(self.requestId, message="Issuer does not exist.", error=r"Issuer with id {} does not exist".format(pk), responseCode="03"),404
         except BaseException as ex:
             self.logger.Info(r"Unable to update issuer with id --> {} due to exception--> {}, requestId --> {}".format(pk, str(ex), self.requestId))
             return Response.error(self.requestId, error=str(ex)),500
@@ -76,7 +76,7 @@ class IssuerService:
                 return Response.success(self.requestId, message="Issuer was successfully deleted"),200
             else:
                 self.logger.Info(r"Issuer with id --> {} was not found, requestId --> {}".format(pk,self.requestId))
-                return Response.error(self.requestId, error="Issuer does not found", responseCode="03"),404
+                return Response.error(self.requestId, message="Issuer does not exist.", error="Issuer does not exist.", responseCode="03"),404
         except BaseException as ex:
             self.logger.Info(r"Unable to delete issuer with id --> {} due to exception--> {}, requestId --> {}".format(pk, str(ex),self.requestId))
             return Response.error(self.requestId, error=str(ex)),500
