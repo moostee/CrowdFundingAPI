@@ -10,8 +10,8 @@ schema_view = get_schema_view(
     openapi.Info(
         title="CrowdFunding API",
         default_version='v1',
-        description="Crowdfunding Application",
-        terms_of_service="https://www.google.com/policies/terms/",
+        description="Python Django API Application For CrowdFunding",
+        terms_of_service="https://www.ubagroup.com/uba-privacy-policy/",
         contact=openapi.Contact(email="ubainnovate@ubagroup.com"),
         license=openapi.License(name="BSD License"),
     ),
@@ -34,4 +34,5 @@ urlpatterns = [
     path('api/fundings/', include('ControllerLayer.Funding.urls')),
     path('api/beneficiarysource/', include('ControllerLayer.BeneficiarySource.urls')), 
     path('api/fundingsourcetypes/', include('ControllerLayer.FundingSourceType.urls')),
+    path('api/fundinggroups/', include('ControllerLayer.FundingGroup.urls')),
 ]

@@ -5,9 +5,9 @@ import uuid
 from ..FundingGroupType.model import FundingGroupType
 from ..User.model import User
 class FundingGroup(BaseModel):
-    CONTINUE = "Continue"
-    ABORT = "Abort"
-    HOLD = "Hold"
+    CONTINUE = "continue"
+    ABORT = "abort"
+    HOLD = "hold"
 
     FAILUREACTION = [
         (CONTINUE, _('Continue Process')),
@@ -16,14 +16,14 @@ class FundingGroup(BaseModel):
     ]
 
     name = models.CharField(max_length=100)
-    fundingGroupType = models.ForeignKey(FundingGroupType, on_delete=models.CASCADE)
+    fundingGroupType = models.ForeignKey(FundingGroupType, related_name='fundingGroupType', on_delete=models.CASCADE, null=False)
     totalCycles = models.PositiveSmallIntegerField(default=1)
     currentCycle = models.PositiveSmallIntegerField(default=1)
     initiator = models.ForeignKey(User, on_delete=models.CASCADE)
     startDate = models.DateField()
     nextCycleDate = models.DateField(null=True)
     cycleDuration = models.CharField(max_length=10, null=True)
-    code = models.CharField(max_length=50)
+    code = models.CharField(max_length=13, unique=True)
     isClosed = models.BooleanField(default=False)
     individualAmount = models.DecimalField(decimal_places=2, max_digits=19, null=True)
     currency = models.CharField(max_length=10, null=True)
