@@ -28,6 +28,11 @@ class FundingGroupTypeSerializer(DynamicFieldsModelSerializer):
         errorMessage = 'This field name needs to be defined in the configuration rules'
         ruleError = 'This configuration requires "key" : "{}" and "value" as part of the rules'
 
+        if 'name' not in configurationsFieldName:
+            errors['name'] = [errorMessage]
+
+        if 'name' not in configurationsFieldName:
+            errors['description'] = [errorMessage]
 
         if 'startDate' not in configurationsFieldName:
             errors['startDate'] = [errorMessage]
