@@ -88,8 +88,9 @@ class FundingGroupTypeSerializer(DynamicFieldsModelSerializer):
     def validate(self, data):
 
         errors = self.ValidateFieldBasedOnDataValue(data)
-        if not re.match('\d+(d|w|m)', data['defaultCycleDuration']) :
-            errors['defaultCycleDuration'] = ['This field requires value in these format[1d,2d,1w,2w,1m,2m] d- days, w-weeks, m-months'] 
+        if data['hasFixedDefaultCycle']:
+            if not re.match('\d+(d|w|m)', data['defaultCycleDuration']) :
+                errors['defaultCycleDuration'] = ['This field requires value in these format[1d,2d,1w,2w,1m,2m] d- days, w-weeks, m-months'] 
     
         if errors is not None:
             raise serializers.ValidationError(detail=errors)
