@@ -13,15 +13,31 @@ class FundingGroupTypeSerializer(DynamicFieldsModelSerializer):
         startDate = next(item for item in config if item["field"] == "startDate")
         startDateMinDate =  next(rule for rule in startDate['rules'] if rule['key'] == 'minDate')
         datePattern = "\d+(d|w|m)"
+        if not isinstance(startDateMinDate['value'], str) : 
+            hasError = True
+            errorMessage = "start date configuration rule key [minDate] accepts value of type string"
+            return hasError, errorMessage
+
         if not re.match(datePattern, startDateMinDate['value']):
             hasError = True
             errorMessage = "Start date configuration rule with key [minDate] accepts value of these formats [0d,1d,2d,1w,2w,1m,2m] d- days, w-weeks, m-months"
 
         return hasError, errorMessage
 
+    def checkRegexValue(self,config):
+        hasError = False
+        errorMessage = ''
+        cycleDuration = next(item for item in config if item["field"] == "cycleDuration")
+        cycleDurationRegex =  next(rule for rule in cycleDuration['rules'] if rule['key'] == 'regex')
+        
+        if not isinstance(cycleDurationRegex['value'], str) : 
+            hasError = True
+            errorMessage = "cycle duration configuration rule key [regex] accepts value of type string"
+        return hasError, errorMessage
+
+
 
     def ValidateFieldBasedOnDataValue(self,data):
-        isValid = False; 
         config = data.pop('config')
         configurationsFieldName = [field['field'] for field in config]
         errors = {}
@@ -39,8 +55,8 @@ class FundingGroupTypeSerializer(DynamicFieldsModelSerializer):
         elif 'minDate' not in [field['key'] for field in (next(item for item in config if item["field"] == "startDate")['rules'])]: 
             errors['startDate'] = [ruleError.format('minDate')]
         else: 
-            hasError, errorMessage = self.checkStartDateValue(config)
-            if hasError : errors['startDate'] = [errorMessage]        
+            hasError, dateErrorMessage = self.checkStartDateValue(config)
+            if hasError : errors['startDate'] = [dateErrorMessage]  
     
         if data['hasFixedIndividualAmount']:
             if 'individualAmount' not in configurationsFieldName :
@@ -57,8 +73,11 @@ class FundingGroupTypeSerializer(DynamicFieldsModelSerializer):
         if not data['hasFixedDefaultCycle'] and not data['defaultCycleDuration']:
             if 'cycleDuration' not in configurationsFieldName :
                 errors['cycleDuration'] = [errorMessage] 
-            elif 'reqex' not in [field['key'] for field in (next(item for item in config if item["field"] == "cycleDuration")['rules'])]: 
-                errors['cycleDuration'] = [ruleError.format('reqex')]
+            elif 'regex' not in [field['key'] for field in (next(item for item in config if item["field"] == "cycleDuration")['rules'])]: 
+                errors['cycleDuration'] = [ruleError.format('regex')]
+            else :
+                hasError, cycleDurationErrorMessage = self.checkRegexValue(config)
+                if hasError : errors['cycleDuration'] = [cycleDurationErrorMessage]
 
         return errors
 

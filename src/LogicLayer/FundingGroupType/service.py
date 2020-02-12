@@ -20,7 +20,7 @@ class FundingGroupTypeService:
 
             if(validData.is_valid() is False):
                 self.logger.Info(r"Create Funding Group Type. Failed validation with: {}, n\ REQUESTID => {}".format(str(validData.errors), self.requestId))
-                return Response.error(self.requestId, error=validData.errors, responseCode='01'), 400
+                return Response.error(self.requestId, message="Validation Error", error=validData.errors, responseCode='01'), 400
 
             savedData = self.data.fundingGroupTypeRepository.create(data)
             self.logger.Info(r"Funding Group Type with id --> {} was successfully created, n\ self.requestId => {}".format(FundingGroupTypeSerializer(savedData).data['id'], self.requestId))
