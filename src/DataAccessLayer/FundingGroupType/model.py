@@ -10,7 +10,7 @@ class FundingGroupType(BaseModel):
     maxUser = models.PositiveSmallIntegerField()
     minUser = models.PositiveSmallIntegerField()
     isAutomatedCycle = models.BooleanField()
-    defaultCycleDuration = models.CharField(max_length=4,null=True)
+    defaultCycleDuration = models.CharField(max_length=4,null=True,blank=True)
     hasRollingBeneficiary = models.BooleanField()
     hasFixedDefaultCycle = models.BooleanField()
     canJoinClosedGroup = models.BooleanField()

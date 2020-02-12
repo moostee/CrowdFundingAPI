@@ -70,7 +70,7 @@ class FundingGroupTypeSerializer(DynamicFieldsModelSerializer):
             if 'targetGroupDate' not in configurationsFieldName :
                 errors['targetGroupDate'] = [errorMessage] 
         
-        if not data['hasFixedDefaultCycle'] and not data['defaultCycleDuration']:
+        if data['hasFixedDefaultCycle'] and not data['defaultCycleDuration']:
             if 'cycleDuration' not in configurationsFieldName :
                 errors['cycleDuration'] = [errorMessage] 
             elif 'regex' not in [field['key'] for field in (next(item for item in config if item["field"] == "cycleDuration")['rules'])]: 
@@ -86,9 +86,14 @@ class FundingGroupTypeSerializer(DynamicFieldsModelSerializer):
         fields = ('__all__')
 
     def validate(self, data):
+
         errors = self.ValidateFieldBasedOnDataValue(data)
+        if not re.match('\d+(d|w|m)', data['defaultCycleDuration']) :
+            errors['defaultCycleDuration'] = ['This field requires value in these format[1d,2d,1w,2w,1m,2m] d- days, w-weeks, m-months'] 
+    
         if errors is not None:
             raise serializers.ValidationError(detail=errors)
+
         return self
 
     def to_internal_value(self, instance):
